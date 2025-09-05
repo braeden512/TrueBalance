@@ -8,7 +8,7 @@ export default function LoginPage() {
       className="min-h-[calc(100vh-5rem)] bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: "url('/images/background_pattern.png')" }}
     >
-      <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-10 w-full max-w-md mx-4">
+      <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-8 w-full max-w-md mx-4">
         <div className="flex justify-center mb-4">
           <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
             <span className="text-2xl font-bold text-white">TB</span>
@@ -17,8 +17,8 @@ export default function LoginPage() {
         
         <h1 className="text-3xl font-bold mb-6 text-center">Log in</h1>
 
-        <form className="flex flex-col gap-4" autoComplete="off">
-          <div>
+        <form className="flex flex-col gap-5" autoComplete="off">
+          <div className="flex flex-col gap-1">
             <Label htmlFor="email">Email</Label>
             <Input 
               id="email" 
@@ -28,7 +28,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
             <Label htmlFor="password">Password</Label>
             <Input 
               id="password" 
