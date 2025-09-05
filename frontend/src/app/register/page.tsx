@@ -8,8 +8,8 @@ export default function RegisterPage() {
       className="min-h-[calc(100vh-5rem)] bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: "url('/images/background_pattern.png')" }}
     >
-      <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-8 w-full max-w-md mx-4">
-        <div className="flex justify-center mb-4">
+      <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-10 w-full max-w-md">
+        <div className="flex justify-center mb-2">
           <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
             <span className="text-2xl font-bold text-white">TB</span>
           </div>
@@ -38,9 +38,9 @@ export default function RegisterPage() {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="password">Retype Password</Label>
+            <Label htmlFor="retype_password">Retype Password</Label>
             <Input 
-              id="password" 
+              id="retype_password" 
               type="password" 
               placeholder="********" 
               autoComplete="new-password"

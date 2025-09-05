@@ -1,0 +1,1 @@
+-- put the query to create the db here, so that if we ever need to clone again we can use it locally
