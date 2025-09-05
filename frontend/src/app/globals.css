@@ -118,16 +118,34 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* fixes weird issue with scrollbar */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+/* end of scrollbar fix */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: inherit;
   }
   body {
     @apply bg-background text-foreground;
     color: rgb(var(--foreground-rgb));
     font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-  }
-  * {
-    font-family: inherit;
   }
 }

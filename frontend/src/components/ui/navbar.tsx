@@ -17,7 +17,7 @@ export default function Navbar() {
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
             <span className="text-lg font-bold text-white">TB</span>
           </div>
-          <span className="text-xl font-bold text-gray-800">True Balance</span>
+          <span className="text-xl font-bold text-gray-800">TrueBalance</span>
         </div>
 
         {/* Navigation Links */}
@@ -75,7 +75,7 @@ export default function Navbar() {
         {/* Auth Buttons */}
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="sm" asChild>
-            {/* haven't created this yet */}
+            {/* haven't created this endpoint yet */}
             <Link href="/logout">Sign Out</Link>
           </Button>
         </div>
