@@ -1,8 +1,61 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { login } = useAuth();
+
+  // hooks
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    const res = await fetch("http://localhost:5000/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, confirmPassword }),
+    });
+
+    const data = await res.json();
+    setLoading(false);
+
+    if (!res.ok) {
+      setError(data.error || "Registration failed");
+    }
+    else {
+      // store token in authcontext and localstorage
+      login(data.token);
+      router.push("/dashboard");
+    }
+  };
+
+  useEffect(() => {
+    // redirect if the user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  })
+
   return (
     <div
       className="min-h-[calc(100vh-5rem)] bg-cover bg-center flex items-center justify-center"
@@ -17,13 +70,15 @@ export default function RegisterPage() {
         
         <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
 
-        <form className="flex flex-col gap-5" autoComplete="off">
+        <form className="flex flex-col gap-5" autoComplete="off" onSubmit={handleRegister}>
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">Email</Label>
             <Input 
               id="email" 
               type="email" 
               placeholder="you@example.com" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
             />
           </div>
@@ -34,6 +89,8 @@ export default function RegisterPage() {
               id="password" 
               type="password" 
               placeholder="********" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
             />
           </div>
@@ -43,11 +100,17 @@ export default function RegisterPage() {
               id="retype_password" 
               type="password" 
               placeholder="********" 
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete="new-password"
             />
           </div>
 
-          <Button className="mt-4 w-full">Register</Button>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          <Button type="submit" className="mt-4 w-full" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
+          </Button>
         </form>
 
         <p className="text-center text-sm text-gray-700 mt-4">

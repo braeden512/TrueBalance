@@ -1,8 +1,63 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login } = useAuth();
+
+  // hooks
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
+      else {
+        // store token in authcontext and localstorage
+        login(data.token);
+        // redirect to dashboard
+        router.push("/dashboard");
+      }
+    }
+    catch (err) {
+      setLoading(false);
+      setError("Server error. Please try again.");
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    // redirect if the user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  })
+
   return (
     <div
       className="min-h-[calc(100vh-5rem)] bg-cover bg-center flex items-center justify-center"
@@ -17,13 +72,15 @@ export default function LoginPage() {
         
         <h1 className="text-3xl font-bold mb-3 text-center">Log in</h1>
 
-        <form className="flex flex-col gap-5" autoComplete="off">
+        <form className="flex flex-col gap-5" autoComplete="off" onSubmit={handleLogin}>
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">Email</Label>
             <Input 
-              id="email" 
-              type="email" 
-              placeholder="you@example.com" 
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
             />
           </div>
@@ -31,14 +88,20 @@ export default function LoginPage() {
           <div className="flex flex-col gap-1">
             <Label htmlFor="password">Password</Label>
             <Input 
-              id="password" 
-              type="password" 
-              placeholder="********" 
+              id="password"
+              type="password"
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
             />
           </div>
 
-          <Button className="mt-4 w-full">Log in</Button>
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          <Button type="submit" className="mt-4 w-full" disabled={loading}>
+            {loading ? "Logging in..." : "Log in"}
+          </Button>
         </form>
 
         <p className="text-center text-sm text-gray-700 mt-4">
