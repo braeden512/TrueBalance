@@ -1,5 +1,7 @@
 "use client";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +31,7 @@ export default function RegisterPage() {
       return;
     }
 
-    const res = await fetch("http://localhost:5000/api/register", {
+    const res = await fetch(`${apiUrl}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, confirmPassword }),
