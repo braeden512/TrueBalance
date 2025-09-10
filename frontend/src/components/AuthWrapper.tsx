@@ -21,7 +21,7 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
   if (loading) {
     // loading screen (we can add something better here later)
     return (
-      <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <p className="text-gray-600 text-lg">Loading...</p>
       </div>
     );
