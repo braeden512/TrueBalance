@@ -69,7 +69,7 @@ export default function AboutPage() {
                 <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
                   M
                 </div>
-                <h3 className="font-semibold text-gray-900">Marco Missiha</h3>
+                <h3 className="font-semibold text-gray-900">Marco Osorio</h3>
                 <p className="text-gray-600">Frontend Developer</p>
               </div>
               
@@ -87,7 +87,7 @@ export default function AboutPage() {
                 <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
                   M
                 </div>
-                <h3 className="font-semibold text-gray-900">Mario Osorio</h3>
+                <h3 className="font-semibold text-gray-900">Mario Missiha</h3>
                 <p className="text-gray-600">Backend Developer</p>
               </div>
             </div>

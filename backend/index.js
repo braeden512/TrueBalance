@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+
+
 import authRoutes from "./routes/auth.js";
 import dashboardRoutes from "./routes/dashboard.js";
-import cors from "cors";
+
+
 
 // load correct env file
 dotenv.config({
@@ -19,6 +23,7 @@ app.use(cors({
 // routes
 app.use("/api", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
