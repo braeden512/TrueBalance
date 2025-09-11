@@ -1,6 +1,7 @@
 "use client";
 
 // this file gives context to other frontend files about what user is logged in and their information
+// really important file
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
