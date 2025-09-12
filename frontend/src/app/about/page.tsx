@@ -79,7 +79,7 @@ export default function AboutPage() {
                   E
                 </div>
                 <h3 className="font-semibold text-gray-900">Eliab Woldegebriel</h3>
-                <p className="text-gray-600">Backend Developer</p>
+                <p className="text-gray-600">Backen Developer</p>
               </div>
               
               {/* Mario */}
