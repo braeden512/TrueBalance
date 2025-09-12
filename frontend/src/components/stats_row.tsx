@@ -1,7 +1,12 @@
 import { DollarSign, Minus, PiggyBank, Plus, TrendingUp } from "lucide-react"
 import { DashboardCell } from "./dashboard_cell"
+import { Transaction } from "./transaction_row";
 
-export function StatsRow() {
+
+interface TransactionRowProps {
+    transactions: Transaction[];
+}
+export function StatsRow({transactions}: TransactionRowProps) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">
             <DashboardCell 

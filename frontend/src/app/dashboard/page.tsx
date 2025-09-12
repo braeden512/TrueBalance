@@ -74,7 +74,7 @@ export default function DashboardPage() {
         {/* adds x-axis padding */}
         <div className="px-4 md:px-6 lg:px-40">
 
-          <StatsRow />
+          <StatsRow transactions = {transactions}/>
 
           {/* header for transaction row */}
          <TransactionHeader setTransactions={setTransactions} />
@@ -86,7 +86,8 @@ export default function DashboardPage() {
               <p className="text-sm text-muted-foreground">Monthly</p>
               <h2 className="text-lg font-bold">Statistics and Graphs</h2>
           </div>
-          <ChartsRow />
+          
+          <ChartsRow transactions = {transactions}/>
 
 
           {/* had an idea for a line graph we could add at the bottom, but not gonna implement yet */}

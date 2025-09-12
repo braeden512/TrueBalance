@@ -5,7 +5,8 @@ import { addTransaction, getTransactions } from "../controllers/transactionContr
 const router = express.Router();
 
 router.get("/verify", authMiddleware, (req, res) => {
- return res.json({ message: "This is protected data", user: req.user });
+    //req.user {id=userid,email=email}
+    return res.json({ message: "This is protected data", user: req.user });
 });
 
 router.get("/transactions", authMiddleware, getTransactions)

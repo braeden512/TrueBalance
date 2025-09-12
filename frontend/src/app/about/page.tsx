@@ -61,17 +61,17 @@ export default function AboutPage() {
                   B
                 </div>
                 <h3 className="font-semibold text-gray-900">Braeden Treutel</h3>
-                <p className="text-gray-600">Frontend Developer</p>
+                <p className="text-gray-600">FullStack Developer</p>
               </div>
               
               {/* Marco */}
-              <div className="text-center">
+              {/* <div className="text-center">
                 <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
                   M
                 </div>
                 <h3 className="font-semibold text-gray-900">Marco Osorio</h3>
                 <p className="text-gray-600">Frontend Developer</p>
-              </div>
+              </div> */}
               
               {/* Eliab */}
               <div className="text-center">
@@ -79,7 +79,7 @@ export default function AboutPage() {
                   E
                 </div>
                 <h3 className="font-semibold text-gray-900">Eliab Woldegebriel</h3>
-                <p className="text-gray-600">Backend Developer</p>
+                 <p className="text-gray-600">FullStack Developer</p>
               </div>
               
               {/* Mario */}
@@ -88,7 +88,7 @@ export default function AboutPage() {
                   M
                 </div>
                 <h3 className="font-semibold text-gray-900">Mario Missiha</h3>
-                <p className="text-gray-600">Backend Developer</p>
+                 <p className="text-gray-600">FullStack Developer</p>
               </div>
             </div>
           </div>
