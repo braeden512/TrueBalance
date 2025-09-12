@@ -11,7 +11,7 @@ import { useAuth } from "../../../context/AuthContext";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login,redirectIfAuthenticated } = useAuth();
 
   // hooks
   const [email, setEmail] = useState("");
@@ -52,11 +52,12 @@ export default function RegisterPage() {
 
   useEffect(() => {
     // redirect if the user is already logged in
-    const token = localStorage.getItem("token");
-    if (token) {
-      router.push("/dashboard");
-    }
-  })
+    // const token = localStorage.getItem("token");
+    // if (token) {
+    //   router.push("/dashboard");
+    // }
+     redirectIfAuthenticated();
+  }, [redirectIfAuthenticated]);
 
   return (
     <div

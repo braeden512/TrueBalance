@@ -1,8 +1,24 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
+import { Transaction } from "./transaction_row";
 
-export function TransactionHeader() {
+
+
+
+
+
+interface TransactionHeaderProps {
+    setTransactions?: React.Dispatch<React.SetStateAction<Transaction[]>>;
+}
+
+export function TransactionHeader({ setTransactions }: TransactionHeaderProps) {
+
+    // creating new transaction here in a min
+
+
+    
+
     return (
         <div className="m-2 flex items-center justify-between">
             <div>
@@ -12,7 +28,7 @@ export function TransactionHeader() {
 
             {/* search bar will go here */}
 
-            <Button variant="default" size="lg" className="px-3">
+            <Button variant="default" size="lg" className="px-3" >
                 Add Transaction
             </Button>
         </div>

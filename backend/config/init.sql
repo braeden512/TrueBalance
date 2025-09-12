@@ -16,11 +16,11 @@ CREATE TABLE transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     number VARCHAR(50),
-    name VARCHAR(100),
-    amount DECIMAL(10, 2),
+    name VARCHAR(100) NOT NULL, 
+    amount DECIMAL(10, 2) NOT NULL, 
     type VARCHAR(20),
+    EconomyType ENUM('Source', 'Sink') NOT NULL,  
     notes TEXT,
-    date_of_transaction DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

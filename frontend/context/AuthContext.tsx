@@ -10,10 +10,13 @@ interface AuthContextType {
     token: string | null;
     login: (token: string) => void;
     logout: () => void;
+     redirectIfAuthenticated: (redirectTo?: string) => Promise<void>; 
     isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
@@ -32,16 +35,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = () => {
         // setLoggingOut is just to make sure navbar disappears at same time as redirect
+       
         setLoggingOut(true);
         localStorage.removeItem("token");
         router.push("/login");
         setToken(null);
     };
 
+    const redirectIfAuthenticated = async (redirectTo: string = "/dashboard") => {
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${apiUrl}/api/dashboard/verify`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (res.ok) {
+                console.log('safe')
+                router.push(redirectTo);
+            } else {
+                console.log("logging out")
+                logout(); 
+            }
+        } catch (err) {
+            console.error(err);
+            logout();
+        }
+    };
+
+
+
     const value = {
         token,
         login,
         logout,
+        redirectIfAuthenticated,
         isAuthenticated: !!token || loggingOut,
     };
 

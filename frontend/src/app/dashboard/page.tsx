@@ -2,17 +2,23 @@
 
 import AuthWrapper from "@/components/AuthWrapper";
 import { StatsRow } from "@/components/stats_row";
-import { TransactionRow } from "@/components/transaction_row";
+import { Transaction, TransactionRow } from "@/components/transaction_row";
 import { ChartsRow } from "@/components/charts_row";
 import { TransactionHeader } from "@/components/transaction_header";
+import { useEffect, useState } from "react";
 
 // mock data (later would be replaced with real fetched data)
-const transactionsData = [
+
+
+
+
+ const transactionsData: Transaction[] = [
   {
     id: 1,
     name: "Shell Gas",
     amount: 43.52,
     type: "Gas",
+    EconomyType: "Sink",
     notes: "Got some gas from a shell station",
     date: "9/10/2025"
   },
@@ -20,6 +26,7 @@ const transactionsData = [
     id: 2,
     name: "Amazon",
     amount: 29.99,
+    EconomyType: "Sink",
     type: "Shopping",
     notes: "Bought a book",
     date: "9/09/2025"
@@ -28,14 +35,36 @@ const transactionsData = [
     id: 3,
     name: "Netflix",
     amount: 15.99,
+    EconomyType: "Sink",
     type: "Subscription",
     notes: "Monthly subscription",
     date: "9/05/2025"
+  },
+   {
+    id: 4,
+    name: "Job",
+    amount: 200,
+    EconomyType: "Source",
+    type: "Check",
+    notes: "Monthly Check",
+    date: "9/05/2025"
   }
+
 ];
 
-
 export default function DashboardPage() {
+
+ 
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+
+  useEffect(() => {
+    //adding the fetch here in a min
+    setTransactions(transactionsData);
+  }, []); 
+
+
   return (
 
     // authwrapper ensures that they have to be logged in to see it
@@ -48,8 +77,9 @@ export default function DashboardPage() {
           <StatsRow />
 
           {/* header for transaction row */}
-          <TransactionHeader />
-          <TransactionRow transactions={transactionsData}/>
+         <TransactionHeader setTransactions={setTransactions} />
+          
+          <TransactionRow  transactions={transactions}/>
 
           {/* header for charts row */}
           <div className="m-2">
