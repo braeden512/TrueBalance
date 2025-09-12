@@ -1,6 +1,7 @@
 import { PieChart, Award } from "lucide-react"
 import { DashboardCell } from "./dashboard_cell"
 import { ChartCell } from "./chart_cell"
+import { Transaction } from "./transaction_row"
 
 // rough draft of what I think the expenses list and the incomes list might look like
 const expenses = [
@@ -39,7 +40,12 @@ const incomes = [
     {amount: 1, type: "Other"},
 ]
 
-export function ChartsRow() {
+interface TransactionRowProps {
+    transactions: Transaction[];
+}
+
+
+export function ChartsRow({transactions}: TransactionRowProps) {
     return (
         <div>
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">

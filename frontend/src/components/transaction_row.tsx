@@ -44,7 +44,7 @@ export function TransactionRow({transactions}: TransactionRowProps) {
                                 {transactions.length > 0 ? (
                                     transactions.map((transaction, index) => (
                                     <TableRow key={transaction.id}>
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{transaction.id}</TableCell>
                                         <TableCell>{transaction.name}</TableCell>
                                         <TableCell style={getStyleColor(transaction.EconomyType)}>{getSign(transaction.EconomyType)}${transaction.amount}</TableCell>
                                         <TableCell>{transaction.type}</TableCell>

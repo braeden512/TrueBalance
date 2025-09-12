@@ -1,7 +1,12 @@
 
 
-export const getTransactions = (req, res) => {}
+export const getTransactions = (req, res) => {
+    const userId = req.user.id;
+
+}
 
 
 
-export const addTransaction = (req, res) => {}
+export const addTransaction = (req, res) => {
+     const userId = req.user.id;
+}
