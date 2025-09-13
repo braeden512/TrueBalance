@@ -1,8 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -146,6 +146,10 @@ html {
   body {
     @apply bg-background text-foreground;
     color: rgb(var(--foreground-rgb));
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    font-family:
+      var(--font-inter),
+      system-ui,
+      -apple-system,
+      sans-serif;
   }
 }

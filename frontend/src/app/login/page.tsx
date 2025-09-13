@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login,redirectIfAuthenticated } = useAuth();
+  const { login, redirectIfAuthenticated } = useAuth();
 
   // hooks
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       const res = await fetch(`${apiUrl}/api/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
@@ -35,19 +35,17 @@ export default function LoginPage() {
       setLoading(false);
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || 'Login failed');
         return;
-      }
-      else {
+      } else {
         // store token in authcontext and localstorage
         login(data.token);
         // redirect to dashboard
-        router.push("/dashboard");
+        router.push('/dashboard');
       }
-    }
-    catch (err) {
+    } catch (err) {
       setLoading(false);
-      setError("Server error. Please try again.");
+      setError('Server error. Please try again.');
       console.error(err);
     }
   };
@@ -73,13 +71,17 @@ export default function LoginPage() {
             <span className="text-2xl font-bold text-white">TB</span>
           </div>
         </div>
-        
+
         <h1 className="text-3xl font-bold mb-3 text-center">Log in</h1>
 
-        <form className="flex flex-col gap-5" autoComplete="off" onSubmit={handleLogin}>
+        <form
+          className="flex flex-col gap-5"
+          autoComplete="off"
+          onSubmit={handleLogin}
+        >
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">Email</Label>
-            <Input 
+            <Input
               id="email"
               type="email"
               placeholder="you@example.com"
@@ -91,7 +93,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-1">
             <Label htmlFor="password">Password</Label>
-            <Input 
+            <Input
               id="password"
               type="password"
               placeholder="********"
@@ -104,12 +106,12 @@ export default function LoginPage() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <Button type="submit" className="mt-4 w-full" disabled={loading}>
-            {loading ? "Logging in..." : "Log in"}
+            {loading ? 'Logging in...' : 'Log in'}
           </Button>
         </form>
 
         <p className="text-center text-sm text-gray-700 mt-4">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <a href="/register" className="text-blue-600 hover:underline">
             Sign up
           </a>

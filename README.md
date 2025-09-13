@@ -23,4 +23,3 @@ With statistics and visual reports, you’ll always know where your money is goi
 <img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/eaa93420-64fb-4ce0-9740-92fe252e7dee" />
 
 <img width="1916" height="905" alt="image" src="https://github.com/user-attachments/assets/b8a99d9f-4411-476e-8cd1-a10cf0a779e9" />
-
