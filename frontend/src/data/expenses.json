@@ -1,0 +1,21 @@
+[
+  { "type": "Rent" },
+  { "type": "Mortgage" },
+  { "type": "Utility Bills" },
+  { "type": "Insurance Bills" },
+  { "type": "Loan Payments" },
+  { "type": "Subscriptions" },
+  { "type": "Groceries" },
+  { "type": "Gas and Transportation" },
+  { "type": "Consumer Goods" },
+  { "type": "Dining Out" },
+  { "type": "Entertainment" },
+  { "type": "Clothing" },
+  { "type": "Car Maintenance" },
+  { "type": "Medical Expenses" },
+  { "type": "Vacations" },
+  { "type": "Gifts and Donations" },
+  { "type": "Home Repairs and Remodels" },
+  { "type": "Lottery or Gambling Losses" },
+  { "type": "Other" }
+]

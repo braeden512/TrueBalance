@@ -7,6 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Card } from './ui/card';
+import { formatDate } from '@/utils/formatDate';
 
 // format used to import the transactions from a particular user
 export interface Transaction {
@@ -24,7 +25,8 @@ interface TransactionRowProps {
 }
 
 const getStyleColor = (type: 'Source' | 'Sink') => ({
-  color: type === 'Source' ? 'red' : 'limegreen',
+  // was backwards... should be good now
+  color: type === 'Source' ? 'limegreen' : 'red',
 });
 const getSign = (type: 'Source' | 'Sink') => (type === 'Source' ? '+' : '-');
 
@@ -51,7 +53,10 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                 {transactions.length > 0 ? (
                   transactions.map((transaction, index) => (
                     <TableRow key={transaction.id}>
-                      <TableCell>{transaction.id}</TableCell>
+                      {/* transaction.id is an easy way for us to identify what transaction it is from ANY user*/}
+                      {/* for example, if two users both make a new transaction, the transaction.id from the second user would say... */}
+                      {/* 2, even though that user hadn't created a transaction yet. this is why we shouldn't use transaction.id for the line below too*/}
+                      <TableCell>{index + 1}</TableCell>
                       <TableCell>{transaction.name}</TableCell>
                       <TableCell style={getStyleColor(transaction.EconomyType)}>
                         {getSign(transaction.EconomyType)}${transaction.amount}
@@ -59,7 +64,8 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                       <TableCell>{transaction.type}</TableCell>
                       <TableCell>{transaction.notes}</TableCell>
                       <TableCell className="text-right">
-                        {transaction.created_at}
+                        {/* look in utils folder to find this file (just formats the date correctly) */}
+                        {formatDate(transaction.created_at)}
                       </TableCell>
                     </TableRow>
                   ))
