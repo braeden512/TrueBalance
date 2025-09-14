@@ -3,15 +3,23 @@ import { db } from '../config/db.js';
 export const createTransaction = async (userId, transactionData) => {
   const { name, amount, type, EconomyType, notes } = transactionData;
 
-  await db.query(
+  const [result] = await db.query(
     'INSERT INTO transactions (user_id, name, amount, type, EconomyType, notes) VALUES (?, ?, ?, ?, ?, ?)',
     [userId, name, amount, type, EconomyType, notes]
   );
+
+  // fetch the new row with its id
+  const [rows] = await db.query('SELECT * FROM transactions WHERE id = ?', [
+    result.insertId,
+  ]);
+
+  return rows[0];
 };
 
 export const getTransactionsByUserId = async (userId) => {
   const [rows] = await db.query(
-    'SELECT * FROM transactions WHERE user_id = ?',
+    // for now I just made it so that it shows most recent first
+    'SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC',
     [userId]
   );
   return rows;

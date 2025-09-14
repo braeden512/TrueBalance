@@ -71,7 +71,7 @@ export default function AboutPage() {
               The passionate developers behind TrueBalance
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Braeden */}
               <div className="text-center">
                 {/* eventually replace this with a picture of us */}

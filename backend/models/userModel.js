@@ -10,6 +10,7 @@ export const createUser = async (email, hashedPassword) => {
 };
 
 //TODO big problem with this because two people can have the same email
+// shouldn't be a problem... userController has a check for duplicate emails, so it wont be possible
 
 // find user by their email (mostly for validation)
 export const findUserByEmail = async (email) => {

@@ -1,0 +1,14 @@
+[
+  { "type": "Salary and Wages" },
+  { "type": "Bonuses and Commissions" },
+  { "type": "Freelance and Consulting Fees" },
+  { "type": "Tips and Gratuities" },
+  { "type": "Rental Income" },
+  { "type": "Capital Gains and Investments" },
+  { "type": "Gifts" },
+  { "type": "Inheritance" },
+  { "type": "Tax Refunds" },
+  { "type": "Grants or Scholarships" },
+  { "type": "Lottery or Gambling Winnings" },
+  { "type": "Other" }
+]
