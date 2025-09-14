@@ -13,7 +13,7 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
 
   // hide the navbar if the user is logged out
-  if (!isAuthenticated){
+  if (!isAuthenticated) {
     return null;
   }
 
@@ -33,10 +33,10 @@ export default function Navbar() {
           <Link
             href="/dashboard"
             className={cn(
-              "rounded-md px-4 py-2 text-sm font-medium transition-colors",
-              pathname === "/dashboard"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              'rounded-md px-4 py-2 text-sm font-medium transition-colors',
+              pathname === '/dashboard'
+                ? 'bg-blue-100 text-blue-700'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             )}
           >
             Dashboard
@@ -44,10 +44,10 @@ export default function Navbar() {
           <Link
             href="/about"
             className={cn(
-              "rounded-md px-4 py-2 text-sm font-medium transition-colors",
-              pathname === "/about"
-                ? "bg-blue-100 text-blue-700"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              'rounded-md px-4 py-2 text-sm font-medium transition-colors',
+              pathname === '/about'
+                ? 'bg-blue-100 text-blue-700'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             )}
           >
             About

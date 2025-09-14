@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "../../context/AuthContext";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { AuthProvider } from '../../context/AuthContext';
 
 // Load the Inter font using the correct import
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "True Balance",
-  description: "Track your income and expenses",
+  title: 'True Balance',
+  description: 'Track your income and expenses',
 };
 
 export default function RootLayout({

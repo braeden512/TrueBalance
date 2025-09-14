@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login,redirectIfAuthenticated } = useAuth();
+  const { login, redirectIfAuthenticated } = useAuth();
 
   // hooks
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     const res = await fetch(`${apiUrl}/api/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, confirmPassword }),
     });
 
@@ -41,12 +41,11 @@ export default function RegisterPage() {
     setLoading(false);
 
     if (!res.ok) {
-      setError(data.error || "Registration failed");
-    }
-    else {
+      setError(data.error || 'Registration failed');
+    } else {
       // store token in authcontext and localstorage
       login(data.token);
-      router.push("/dashboard");
+      router.push('/dashboard');
     }
   };
 
@@ -56,7 +55,7 @@ export default function RegisterPage() {
     // if (token) {
     //   router.push("/dashboard");
     // }
-     redirectIfAuthenticated();
+    redirectIfAuthenticated();
   }, [redirectIfAuthenticated]);
 
   return (
@@ -70,16 +69,20 @@ export default function RegisterPage() {
             <span className="text-2xl font-bold text-white">TB</span>
           </div>
         </div>
-        
+
         <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
 
-        <form className="flex flex-col gap-5" autoComplete="off" onSubmit={handleRegister}>
+        <form
+          className="flex flex-col gap-5"
+          autoComplete="off"
+          onSubmit={handleRegister}
+        >
           <div className="flex flex-col gap-1">
             <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              placeholder="you@example.com" 
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
@@ -88,10 +91,10 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1">
             <Label htmlFor="password">Password</Label>
-            <Input 
-              id="password" 
-              type="password" 
-              placeholder="********" 
+            <Input
+              id="password"
+              type="password"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
@@ -99,10 +102,10 @@ export default function RegisterPage() {
           </div>
           <div className="flex flex-col gap-1">
             <Label htmlFor="retype_password">Retype Password</Label>
-            <Input 
-              id="retype_password" 
-              type="password" 
-              placeholder="********" 
+            <Input
+              id="retype_password"
+              type="password"
+              placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete="new-password"
@@ -112,12 +115,12 @@ export default function RegisterPage() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
           <Button type="submit" className="mt-4 w-full" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
+            {loading ? 'Registering...' : 'Register'}
           </Button>
         </form>
 
         <p className="text-center text-sm text-gray-700 mt-4">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <a href="/login" className="text-blue-600 hover:underline">
             Log in
           </a>

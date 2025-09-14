@@ -5,9 +5,12 @@
   "scripts": {
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "cd backend && node index.js",
-    "start-frontend": "cd frontend && npm run dev"
+    "start-frontend": "cd frontend && npm run dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2"
   }
 }
