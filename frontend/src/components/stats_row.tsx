@@ -2,40 +2,125 @@ import { DollarSign, Minus, PiggyBank, Plus, TrendingUp } from 'lucide-react';
 import { DashboardCell } from './dashboard_cell';
 import { Transaction } from './transaction_row';
 
+
 interface TransactionRowProps {
   transactions: Transaction[];
 }
 export function StatsRow({ transactions }: TransactionRowProps) {
+  // define time periods dynamically
+  const now = new Date(); // current month
+  const currentEnd = new Date(now);
+  const currentStart = new Date(now);
+  currentStart.setDate(now.getDate() - 30);
+
+  const lastEnd = new Date(currentStart); // last month
+  const lastStart = new Date(currentStart);
+  lastStart.setDate(currentStart.getDate() - 30);
+
+  // initialize totals 
+  let incomeCurrent = 0;
+  let expenseCurrent = 0;
+  let incomeLast = 0;
+  let expenseLast = 0;
+
+  // loop through each transaction
+  for (let transaction of transactions) {
+    const amount = Number(transaction.amount);
+    const transactionDate = new Date(transaction.created_at);
+
+    if (transactionDate >= currentStart && transactionDate <= currentEnd){
+      // includes currentStart and currentEnd
+      if (transaction.EconomyType == "Source") {
+        incomeCurrent += amount;
+      }
+      else if (transaction.EconomyType == "Sink") {
+        expenseCurrent += amount;
+      }
+
+    } else if (transactionDate >= lastStart && transactionDate < lastEnd) {
+      // includes lastStart, excludes lastEnd
+      if (transaction.EconomyType == "Source") {
+        incomeLast += amount;
+      }
+      else if (transaction.EconomyType == "Sink") {
+        expenseLast += amount;
+      }
+    }
+
+  }
+
+  // compute results
+  const netCurrent = incomeCurrent - expenseCurrent;
+  const netLast = incomeLast - expenseLast;
+
+  const totalIncome = "$" + (incomeCurrent).toFixed(2);
+  const totalExpense = "$" + (expenseCurrent).toFixed(2);
+  const totalDollar = "$" + (incomeCurrent + expenseCurrent).toFixed(2)
+  const netSaving = "$" + (netCurrent).toFixed(2)
+
+  let change;
+  if (netLast !== 0) {
+    const percent = (((netCurrent - netLast)/ netLast) * 100)
+    change = percent.toFixed(1) + "%";
+  } else {
+    change = "N/A";
+  }
+
+
+  // format date as "Month Day, Year"
+  const formatDate = (date: Date) => 
+    date.toLocaleDateString("en-US",{
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+  
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">
-      <DashboardCell
-        icon={<Plus size={28} />}
-        number="$475.23"
-        label="Income This Month"
-      />
-      <DashboardCell
-        icon={<Minus size={28} />}
-        number="$475.23"
-        label="Expenses This Month"
-      />
-      {/* overall income - expenses */}
-      <DashboardCell
-        icon={<DollarSign size={28} />}
-        number="$999.99"
-        label="Total Dollar Amount"
-      />
-      {/* just the income - expenses for the month */}
-      <DashboardCell
-        icon={<PiggyBank size={28} />}
-        number="$1,502.03"
-        label="Net Savings This Month"
-      />
-      {/* not sure exactly how this will work yet */}
-      <DashboardCell
-        icon={<TrendingUp size={28} />}
-        number="23.2%"
-        label="Change From Last Month"
-      />
+    <div>
+      {/* period headers */}
+      <div className='mb-4 text-center text-gray-600'>
+        <p>
+          <strong>Current Month:</strong> {formatDate(currentStart)} - {" "} {formatDate(currentEnd)}
+        </p>
+
+        <p>
+          <strong>Last Month:</strong> {formatDate(lastStart)} - {" "} {formatDate(lastEnd)}
+        </p>
+      </div>
+
+      {/* stats cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">
+        <DashboardCell
+          icon={<Plus size={28} />}
+          number={totalIncome}
+          label="Income This Month"
+        />
+        <DashboardCell
+          icon={<Minus size={28} />}
+          number={totalExpense}
+          label="Expenses This Month"
+        />
+        {/* overall income - expenses */}
+        <DashboardCell
+          icon={<DollarSign size={28} />}
+          number={totalDollar}
+          label="Total Dollar Amount"
+        />
+        {/* just the income - expenses for the month */}
+        <DashboardCell
+          icon={<PiggyBank size={28} />}
+          number={netSaving}
+          label="Net Savings This Month"
+        />
+        {/* not sure exactly how this will work yet */}
+        <DashboardCell
+          icon={<TrendingUp size={28} />}
+          number={change}
+          label="Change From Last Month"
+        />
+      </div>
+
     </div>
+
   );
 }

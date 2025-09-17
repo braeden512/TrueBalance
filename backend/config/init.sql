@@ -1,7 +1,7 @@
 -- this is not complete, just wanted to make a user table so I could begin working on logins and registering
 
 -- added a couple lines here to make it easy to reset the db if needed
-CREATE DATABASE truebalance IF NOT EXISTS truebalance;
+CREATE DATABASE IF NOT EXISTS truebalance;
 
 USE truebalance;
 
