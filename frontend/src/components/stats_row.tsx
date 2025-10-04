@@ -2,7 +2,6 @@ import { DollarSign, Minus, PiggyBank, Plus, TrendingUp } from 'lucide-react';
 import { DashboardCell } from './dashboard_cell';
 import { Transaction } from './transaction_row';
 
-
 interface TransactionRowProps {
   transactions: Transaction[];
 }
@@ -17,77 +16,53 @@ export function StatsRow({ transactions }: TransactionRowProps) {
   const lastStart = new Date(currentStart);
   lastStart.setDate(currentStart.getDate() - 30);
 
-  // initialize totals 
+  // initialize totals
   let incomeCurrent = 0;
   let expenseCurrent = 0;
   let incomeLast = 0;
   let expenseLast = 0;
 
   // loop through each transaction
-  for (let transaction of transactions) {
+  for (const transaction of transactions) {
     const amount = Number(transaction.amount);
     const transactionDate = new Date(transaction.created_at);
 
-    if (transactionDate >= currentStart && transactionDate <= currentEnd){
+    if (transactionDate >= currentStart && transactionDate <= currentEnd) {
       // includes currentStart and currentEnd
-      if (transaction.EconomyType == "Source") {
+      if (transaction.EconomyType == 'Source') {
         incomeCurrent += amount;
-      }
-      else if (transaction.EconomyType == "Sink") {
+      } else if (transaction.EconomyType == 'Sink') {
         expenseCurrent += amount;
       }
-
     } else if (transactionDate >= lastStart && transactionDate < lastEnd) {
       // includes lastStart, excludes lastEnd
-      if (transaction.EconomyType == "Source") {
+      if (transaction.EconomyType == 'Source') {
         incomeLast += amount;
-      }
-      else if (transaction.EconomyType == "Sink") {
+      } else if (transaction.EconomyType == 'Sink') {
         expenseLast += amount;
       }
     }
-
   }
 
   // compute results
   const netCurrent = incomeCurrent - expenseCurrent;
   const netLast = incomeLast - expenseLast;
 
-  const totalIncome = "$" + (incomeCurrent).toFixed(2);
-  const totalExpense = "$" + (expenseCurrent).toFixed(2);
-  const totalDollar = "$" + (incomeCurrent + expenseCurrent).toFixed(2)
-  const netSaving = "$" + (netCurrent).toFixed(2)
+  const totalIncome = '$' + incomeCurrent.toFixed(2);
+  const totalExpense = '$' + expenseCurrent.toFixed(2);
+  const totalDollar = '$' + (incomeCurrent + expenseCurrent).toFixed(2);
+  const netSaving = '$' + netCurrent.toFixed(2);
 
   let change;
   if (netLast !== 0) {
-    const percent = (((netCurrent - netLast)/ netLast) * 100)
-    change = percent.toFixed(1) + "%";
+    const percent = ((netCurrent - netLast) / netLast) * 100;
+    change = percent.toFixed(1) + '%';
   } else {
-    change = "N/A";
+    change = 'N/A';
   }
 
-
-  // format date as "Month Day, Year"
-  const formatDate = (date: Date) => 
-    date.toLocaleDateString("en-US",{
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
-  
   return (
     <div>
-      {/* period headers */}
-      <div className='mb-4 text-center text-gray-600'>
-        <p>
-          <strong>Current Month:</strong> {formatDate(currentStart)} - {" "} {formatDate(currentEnd)}
-        </p>
-
-        <p>
-          <strong>Last Month:</strong> {formatDate(lastStart)} - {" "} {formatDate(lastEnd)}
-        </p>
-      </div>
-
       {/* stats cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">
         <DashboardCell
@@ -119,8 +94,6 @@ export function StatsRow({ transactions }: TransactionRowProps) {
           label="Change From Last Month"
         />
       </div>
-
     </div>
-
   );
 }

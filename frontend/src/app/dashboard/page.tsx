@@ -6,6 +6,7 @@ import { Transaction, TransactionRow } from '@/components/transaction_row';
 import { ChartsRow } from '@/components/charts_row';
 import { TransactionHeader } from '@/components/transaction_header';
 import { useEffect, useState } from 'react';
+import { LineRow } from '@/components/line_row';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -57,7 +58,12 @@ export default function DashboardPage() {
 
           <ChartsRow transactions={transactions} />
 
-          {/* had an idea for a line graph we could add at the bottom, but not gonna implement yet */}
+          {/* header for charts row */}
+          <div className="m-2">
+            <p className="text-sm text-muted-foreground">All</p>
+            <h2 className="text-lg font-bold">Transactions Over Time</h2>
+          </div>
+          <LineRow transactions={transactions} />
         </div>
       </div>
     </AuthWrapper>

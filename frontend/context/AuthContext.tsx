@@ -19,6 +19,7 @@ interface AuthContextType {
   logout: () => void;
   redirectIfAuthenticated: (redirectTo?: string) => Promise<void>;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 interface JwtPayload {
   // exp is how we identify when the token expires
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // this part just ensures that the user's token hasn't expired
@@ -60,6 +62,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Invalid token', err);
       logout();
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -120,6 +124,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout,
     redirectIfAuthenticated,
     isAuthenticated: !!token || loggingOut,
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

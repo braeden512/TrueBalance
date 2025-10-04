@@ -37,7 +37,7 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
         <Card className="p-5">
           <div className="max-h-96 overflow-y-auto">
             <Table>
-              <TableHeader>
+              <TableHeader className="sticky top-0 w-full border-b bg-white shadow-sm z-50">
                 <TableRow>
                   <TableHead className="w-[70px]">#</TableHead>
                   <TableHead>Name</TableHead>
