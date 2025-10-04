@@ -9,43 +9,50 @@ interface TransactionRowProps {
 
 export function ChartsRow({ transactions }: TransactionRowProps) {
   // separate transactions into incomes and expense
-  const incomeTransactions = transactions.filter(transction => transction.EconomyType == "Source");
-  const expenseTransactions = transactions.filter(transction => transction.EconomyType == "Sink");
+  const incomeTransactions = transactions.filter(
+    (transaction) => transaction.EconomyType == 'Source'
+  );
+  const expenseTransactions = transactions.filter(
+    (transaction) => transaction.EconomyType == 'Sink'
+  );
 
   // aggregate transaction by type
-  const aggregateTransctionsByType = (transactionsList: Transaction[]) => {
+  const aggregateTransactionsByType = (transactionsList: Transaction[]) => {
     const totalsByType: Record<string, number> = {};
 
-    for (const transction of transactionsList) {
-      const transactionType = transction.type;
-      const transctionAmount = Number(transction.amount);
+    for (const transaction of transactionsList) {
+      const transactionType = transaction.type;
+      const transactionAmount = Number(transaction.amount);
 
       if (totalsByType[transactionType] == undefined) {
-        totalsByType[transactionType] = 0; // initialize if not seen yet 
+        totalsByType[transactionType] = 0; // initialize if not seen yet
       }
 
-      totalsByType[transactionType] = totalsByType[transactionType] + transctionAmount;
+      totalsByType[transactionType] =
+        totalsByType[transactionType] + transactionAmount;
     }
 
     // convert the totals object into an array of {type, amount}
-    const aggregatedTransactions: {type:string, amount:number} [] = [];
+    const aggregatedTransactions: { type: string; amount: number }[] = [];
     for (const type in totalsByType) {
       if (totalsByType.hasOwnProperty(type)) {
-        aggregatedTransactions.push({type:type, amount:totalsByType[type]});
+        aggregatedTransactions.push({ type: type, amount: totalsByType[type] });
       }
     }
 
     return aggregatedTransactions;
   };
 
-  const aggregatedIncomes = aggregateTransctionsByType(incomeTransactions);
-  const aggregatedExpenses = aggregateTransctionsByType(expenseTransactions);
+  const aggregatedIncomes = aggregateTransactionsByType(incomeTransactions);
+  const aggregatedExpenses = aggregateTransactionsByType(expenseTransactions);
 
-  // find the transction type with the highest amount
-  const findLargestTransaction = (aggregatedTransctions: {type:string; amount:number}[]) => {
-    let largestTransaction = {type: "", amount:0};
+  // find the transaction type with the highest amount
+  const findLargestTransaction = (
+    aggregatedTransactions: { type: string; amount: number }[]
+  ) => {
+    let largestTransaction = { type: '', amount: 0 };
 
-    for (const transaction of aggregatedTransctions) {
+    for (const transaction of aggregatedTransactions) {
       if (transaction.amount > largestTransaction.amount) {
         largestTransaction = transaction;
       }
@@ -64,24 +71,28 @@ export function ChartsRow({ transactions }: TransactionRowProps) {
 
   let totalExpenseAmount = 0;
   for (const transaction of aggregatedExpenses) {
-    totalExpenseAmount = totalExpenseAmount + transaction.amount
+    totalExpenseAmount = totalExpenseAmount + transaction.amount;
   }
 
   // calculate percentage of the largest transaction relative to the total
-  let largestIncomePercentage:string;
+  let largestIncomePercentage: string;
   if (totalIncomeAmount > 0) {
-    largestIncomePercentage = ((largestIncomeTransaction.amount / totalIncomeAmount) * 100).toFixed(1) + "%";
+    largestIncomePercentage =
+      ((largestIncomeTransaction.amount / totalIncomeAmount) * 100).toFixed(1) +
+      '%';
   } else {
-    largestIncomePercentage = "N/A";
+    largestIncomePercentage = 'N/A';
   }
 
-  let largestExpensePercentage:string;
+  let largestExpensePercentage: string;
   if (totalExpenseAmount > 0) {
-    largestExpensePercentage = ((largestExpenseTransaction.amount / totalExpenseAmount) * 100).toFixed(1) + "%";
+    largestExpensePercentage =
+      ((largestExpenseTransaction.amount / totalExpenseAmount) * 100).toFixed(
+        1
+      ) + '%';
   } else {
-    largestExpensePercentage = "N/A";
+    largestExpensePercentage = 'N/A';
   }
-
 
   return (
     <div>
@@ -89,16 +100,25 @@ export function ChartsRow({ transactions }: TransactionRowProps) {
         <ChartCell title="Types of Income" data={aggregatedIncomes} />
         <ChartCell title="Types of Expenses" data={aggregatedExpenses} />
         <div className="flex flex-col gap-4">
-          {/* gonna have to actually calculate these out somewhere and import them through these fields */}
           <DashboardCell
             icon={<PieChart size={28} />}
             number={largestExpensePercentage}
-            label={`Biggest Expense - ${largestExpenseTransaction.type}`}
+            label={
+              largestExpenseTransaction.type
+                ? `Biggest Expense - ${largestExpenseTransaction.type}`
+                : // made a small fix here to correct the label
+                  'No expenses found.'
+            }
           />
           <DashboardCell
             icon={<Award size={28} />}
             number={largestIncomePercentage}
-            label={`Biggest Income - ${largestIncomeTransaction.type}`}
+            label={
+              largestIncomeTransaction.type
+                ? `Biggest Income - ${largestIncomeTransaction.type}`
+                : // made a small fix here to correct the label
+                  'No incomes found.'
+            }
           />
         </div>
       </div>

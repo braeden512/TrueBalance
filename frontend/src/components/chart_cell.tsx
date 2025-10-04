@@ -25,32 +25,41 @@ const COLORS = [
 ];
 
 export function ChartCell({ title, data }: ChartCellProps) {
+  // check if data is not empty
+  const hasData = data && data.length > 0;
+
   return (
     <Card className="flex flex-col col-span-2">
       <CardHeader className="text-center font-semibold">{title}</CardHeader>
-      <CardContent className="flex-1">
-        <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="amount"
-              nameKey="type"
-              cx="50%"
-              cy="50%"
-              innerRadius={65}
-              outerRadius={100}
-              paddingAngle={5}
-            >
-              {data.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
+      <CardContent className="flex-1 flex items-center justify-center">
+        {hasData ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="amount"
+                nameKey="type"
+                cx="50%"
+                cy="50%"
+                innerRadius={65}
+                outerRadius={100}
+                paddingAngle={5}
+              >
+                {data.map((_, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="w-full h-[200px] flex items-center justify-center text-gray-500">
+            No transactions found.
+          </div>
+        )}
       </CardContent>
     </Card>
   );
