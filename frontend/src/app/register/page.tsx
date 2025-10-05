@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -98,6 +99,14 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <PasswordStrengthBar
+              password={password}
+              minLength={8}
+              shortScoreWord="Too short"
+              scoreWords={['Very weak', 'Weak', 'Okay', 'Good', 'Strong']}
             />
           </div>
           <div className="flex flex-col gap-1">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from './ui/navbar';
 import Loading from './ui/loading';
+import Footer from './ui/footer';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     <>
       <Navbar />
       {children}
+      <Footer />
     </>
   );
 }

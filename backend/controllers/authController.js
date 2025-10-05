@@ -1,6 +1,7 @@
 // handles authentication register/login logic
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import zxcvbn from 'zxcvbn';
 import { findUserByEmail, createUser } from '../models/userModel.js';
 
 // register logic controller
@@ -16,6 +17,16 @@ export const register = async (req, res) => {
     // check if password matches retype password
     if (password !== confirmPassword) {
       return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
+    // check strength of password
+    const { score, feedback } = zxcvbn(password);
+    // we can change this threshold later if needed
+    if (score < 3) {
+      return res.status(400).json({
+        error: 'Weak password',
+        feedback: feedback.suggestions.join(' '),
+      });
     }
 
     // check if user already exists
@@ -42,7 +53,7 @@ export const register = async (req, res) => {
   }
 };
 
-// register logic controller
+// login logic controller
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;

@@ -68,6 +68,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (newToken: string) => {
+    // should already be true, but just in case
+    setLoading(true);
     localStorage.setItem('token', newToken);
     setToken(newToken);
 
@@ -80,6 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Invalid token on login', err);
     }
+    setLoading(false);
   };
 
   const logout = () => {

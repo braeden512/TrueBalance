@@ -18,7 +18,7 @@ export function DashboardCell({ icon, number, label }: DashboardCellProps) {
         <span className="text-2xl font-bold">{number}</span>
       </CardHeader>
 
-      <CardContent className="text-sm text-center text-muted-foreground -mt-8">
+      <CardContent className="text-sm text-center text-gray-500 -mt-8">
         {label}
       </CardContent>
     </Card>

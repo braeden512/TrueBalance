@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/table';
 import { Card } from './ui/card';
 import { formatDate } from '@/utils/formatDate';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 // format used to import the transactions from a particular user
 export interface Transaction {
@@ -37,7 +38,7 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
         <Card className="p-5">
           <div className="max-h-96 overflow-y-auto">
             <Table>
-              <TableHeader className="sticky top-0 w-full border-b bg-white shadow-sm z-50">
+              <TableHeader className="w-full border-b bg-white shadow-sm">
                 <TableRow>
                   <TableHead className="w-[70px]">#</TableHead>
                   <TableHead>Name</TableHead>
@@ -59,7 +60,8 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{transaction.name}</TableCell>
                       <TableCell style={getStyleColor(transaction.EconomyType)}>
-                        {getSign(transaction.EconomyType)}${transaction.amount}
+                        {getSign(transaction.EconomyType)}
+                        {formatCurrency(Number(transaction.amount))}
                       </TableCell>
                       <TableCell>{transaction.type}</TableCell>
                       <TableCell>{transaction.notes}</TableCell>
@@ -71,7 +73,10 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center pt-6">
+                    <TableCell
+                      colSpan={6}
+                      className="text-center pt-6 text-gray-500"
+                    >
                       No transactions found.
                     </TableCell>
                   </TableRow>
