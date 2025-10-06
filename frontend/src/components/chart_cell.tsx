@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { formatCurrency } from '@/utils/formatCurrency';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 // this is the format that we import in the data from the database with
@@ -43,7 +44,7 @@ export function ChartCell({ title, data }: ChartCellProps) {
                 cy="50%"
                 innerRadius={65}
                 outerRadius={100}
-                paddingAngle={5}
+                paddingAngle={2}
               >
                 {data.map((_, index) => (
                   <Cell
@@ -52,7 +53,9 @@ export function ChartCell({ title, data }: ChartCellProps) {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                formatter={(value: number) => formatCurrency(Number(value))}
+              />
             </PieChart>
           </ResponsiveContainer>
         ) : (

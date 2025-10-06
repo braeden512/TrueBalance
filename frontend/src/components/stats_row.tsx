@@ -1,6 +1,7 @@
 import { DollarSign, Minus, PiggyBank, Plus, TrendingUp } from 'lucide-react';
 import { DashboardCell } from './dashboard_cell';
 import { Transaction } from './transaction_row';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 interface TransactionRowProps {
   transactions: Transaction[];
@@ -48,10 +49,10 @@ export function StatsRow({ transactions }: TransactionRowProps) {
   const netCurrent = incomeCurrent - expenseCurrent;
   const netLast = incomeLast - expenseLast;
 
-  const totalIncome = '$' + incomeCurrent.toFixed(2);
-  const totalExpense = '$' + expenseCurrent.toFixed(2);
-  const totalDollar = '$' + (incomeCurrent + expenseCurrent).toFixed(2);
-  const netSaving = '$' + netCurrent.toFixed(2);
+  const totalIncome = formatCurrency(incomeCurrent);
+  const totalExpense = formatCurrency(expenseCurrent);
+  const totalDollar = formatCurrency(incomeCurrent - expenseCurrent);
+  const netSaving = formatCurrency(netCurrent);
 
   let change;
   if (netLast !== 0) {

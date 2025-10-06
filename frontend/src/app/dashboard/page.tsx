@@ -25,10 +25,6 @@ export default function DashboardPage() {
 
       const data = await results.json();
       setTransactions(data.transactions);
-
-      //gets ran twice for some reason
-      // i looked it up... its bc of react strict mode (it wont be like this in production)
-      console.log(data);
     };
 
     initialFetch();
@@ -60,7 +56,7 @@ export default function DashboardPage() {
 
           {/* header for charts row */}
           <div className="m-2">
-            <p className="text-sm text-muted-foreground">All</p>
+            <p className="text-sm text-muted-foreground">Monthly</p>
             <h2 className="text-lg font-bold">Transactions Over Time</h2>
           </div>
           <LineRow transactions={transactions} />

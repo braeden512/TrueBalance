@@ -9,6 +9,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import { Card } from './ui/card';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 // format date as M/D/YY
 function formatDateLabel(tick: number) {
@@ -44,11 +45,21 @@ export function LineRow({ transactions }: LineRowProps) {
     const amount = Number(t.amount);
     runningTotal += t.EconomyType === 'Source' ? amount : -amount;
     return {
-      date: new Date(t.created_at).getTime(), // for x-axis spacing
+      date: new Date(t.created_at).getTime(),
       total: runningTotal,
       type: t.EconomyType,
     };
   });
+
+  if (chartData.length === 0) {
+    return (
+      <div className="grid m-2">
+        <Card className="flex flex-col col-span-2 p-12 h-120 items-center justify-center">
+          <span className="text-gray-500">No transactions found.</span>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="grid m-2">
@@ -72,7 +83,10 @@ export function LineRow({ transactions }: LineRowProps) {
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip
                 labelFormatter={(label) => `Date: ${formatDateLabel(label)}`}
-                formatter={(value: number) => [`$${value.toFixed(2)}`, 'Total']}
+                formatter={(value: number) => [
+                  `${formatCurrency(value)}`,
+                  'Total',
+                ]}
               />
               <Line
                 type="monotone"
