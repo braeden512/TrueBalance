@@ -30,6 +30,14 @@ export default function DashboardPage() {
     initialFetch();
   }, []);
 
+  // handles deletion success event from transaction row
+  const handleTransactionDelete = (deletedId : number) => {
+    // filter out deleted transaction from the current state
+    setTransactions((prevTransactions) => 
+      prevTransactions.filter((transactionData) => transactionData.id !== deletedId)
+    );
+  };
+
   return (
     // authwrapper ensures that they have to be logged in to see it
     <AuthWrapper>
@@ -44,7 +52,10 @@ export default function DashboardPage() {
           {/* header for transaction row */}
           <TransactionHeader setTransactions={setTransactions} />
 
-          <TransactionRow transactions={transactions} />
+          <TransactionRow 
+            transactions={transactions} 
+            onDeleteSuccess={handleTransactionDelete}
+          />
 
           {/* header for charts row */}
           <div className="m-2">
