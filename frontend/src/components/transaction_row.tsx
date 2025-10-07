@@ -92,7 +92,7 @@ export function TransactionRow({ transactions, onDeleteSuccess}: TransactionRowP
                   <TableHead className="text-right">
                     Date of Transaction
                   </TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className='text-right'>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -115,7 +115,7 @@ export function TransactionRow({ transactions, onDeleteSuccess}: TransactionRowP
                         {formatDate(transaction.created_at)}
                       </TableCell>
 
-                      <TableCell className='space-x-2'>
+                      <TableCell className='space-x-2 text-right'>
                         <Button
                           variant={'ghost'}
                         >
@@ -136,7 +136,7 @@ export function TransactionRow({ transactions, onDeleteSuccess}: TransactionRowP
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={7}
+                      colSpan={6}
                       className="text-center pt-6 text-gray-500"
                     >
                       No transactions found.
