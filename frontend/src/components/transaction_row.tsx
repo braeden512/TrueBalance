@@ -10,6 +10,13 @@ import { Card } from './ui/card';
 import { formatDate } from '@/utils/formatDate';
 import { formatCurrency } from '@/utils/formatCurrency';
 
+// delete and edit button
+import { Button } from './ui/button';
+import { Trash } from 'lucide-react';
+import { Pencil } from 'lucide-react';
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 // format used to import the transactions from a particular user
 export interface Transaction {
   id: number;
@@ -23,7 +30,12 @@ export interface Transaction {
 
 interface TransactionRowProps {
   transactions: Transaction[];
+
+  // update parent state after successful deletion
+  onDeleteSuccess : (deletedTransactionId: number) => void;
 }
+
+
 
 const getStyleColor = (type: 'Source' | 'Sink') => ({
   // was backwards... should be good now
@@ -31,7 +43,39 @@ const getStyleColor = (type: 'Source' | 'Sink') => ({
 });
 const getSign = (type: 'Source' | 'Sink') => (type === 'Source' ? '+' : '-');
 
-export function TransactionRow({ transactions }: TransactionRowProps) {
+export function TransactionRow({ transactions, onDeleteSuccess}: TransactionRowProps) {
+
+  // confirmation before deletion
+  const handleDelete = async (transactionId:number) => {
+    if (!window.confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+
+    try {
+      const res = await fetch (
+        `${apiUrl}/api/dashboard/deleteTransaction/${transactionId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        }
+      );
+      
+      // success
+      if (res.status === 204) {
+        onDeleteSuccess(transactionId);
+      } else {
+        const errorData = await res.json();
+        console.error('Failed to delete transaction', errorData.error);
+        alert(`Failed to delete transaction: ${errorData.error || 'Server error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Unexpected error occurred during deletion');
+    }
+  };
+
   return (
     <div>
       <div className="m-2">
@@ -48,6 +92,7 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                   <TableHead className="text-right">
                     Date of Transaction
                   </TableHead>
+                  <TableHead className='text-right'>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -69,6 +114,23 @@ export function TransactionRow({ transactions }: TransactionRowProps) {
                         {/* look in utils folder to find this file (just formats the date correctly) */}
                         {formatDate(transaction.created_at)}
                       </TableCell>
+
+                      <TableCell className='space-x-2 text-right'>
+                        <Button
+                          variant={'ghost'}
+                        >
+                          <Pencil></Pencil>
+
+                        </Button>
+                        <Button
+                          variant={'ghost'}
+                          onClick={() => handleDelete(transaction.id)}
+                          className='hover:bg-red-100'
+                        >
+                          <Trash className='text-red-500'></Trash>
+                        </Button>                        
+                      </TableCell>
+
                     </TableRow>
                   ))
                 ) : (
