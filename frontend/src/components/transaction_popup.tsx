@@ -8,6 +8,7 @@ import incomes from '../data/incomes.json';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -109,9 +110,13 @@ export function TransactionPopup({
       <DialogContent className="sm:max-w-lg bg-gray-100 backdrop-blur rounded-xl p-6">
         <DialogHeader>
           <DialogTitle>Add Transaction</DialogTitle>
-          <p className="text-sm text-gray-600 mt-1">
+          {/* <p className="text-sm text-gray-600 mt-1">
             Set the details of the transaction
-          </p>
+          </p> */}
+          {/* annoying warning without it i think it looks the same but if you think the other one is better you can just switch it back */}
+          <DialogDescription>
+            Set the details of the transaction
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs
