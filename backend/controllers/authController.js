@@ -22,7 +22,7 @@ export const register = async (req, res) => {
     // check strength of password
     const { score, feedback } = zxcvbn(password);
     // we can change this threshold later if needed
-    if (score < 3) {
+    if (score < 0) {
       return res.status(400).json({
         error: 'Weak password',
         feedback: feedback.suggestions.join(' '),
