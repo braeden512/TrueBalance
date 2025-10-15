@@ -7,25 +7,31 @@ import { ChartsRow } from '@/components/charts_row';
 import { TransactionHeader } from '@/components/transaction_header';
 import { useEffect, useState } from 'react';
 import { LineRow } from '@/components/line_row';
+import { LineHeader } from '@/components/line_header';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 interface PredictionData {
-    data_size?: number, 
-    predict_x_epoch?: number,
-    predict_y_net_saving?: number,
-    warning?: string,
-    regression: {
-        slope: number,
-        intercept: number
-    }
-    error?: string;
-
+	data_size?: number;
+	predict_x_epoch?: number;
+	predict_y_net_saving?: number;
+	warning?: string;
+	regression: {
+		slope: number;
+		intercept: number;
+	};
+	error?: string;
 }
 
 export default function DashboardPage() {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [predictionResult, setPredictionResult] = useState<PredictionData | null>(null);
+	const [predictionResult, setPredictionResult] =
+		useState<PredictionData | null>(null);
+
+	// state for prediction date
+	const [predictionDate, setPredictionDate] = useState<Date | undefined>(
+		undefined
+	);
 
 	useEffect(() => {
 		const initialFetch = async () => {
@@ -64,23 +70,48 @@ export default function DashboardPage() {
 		);
 	};
 
-    // automatically fetch prediction when transaction are fetched
-    useEffect(() => {
+	// handler for when date changes in LineHeader
+	const handleDateChange = (date: Date | undefined) => {
+		setPredictionDate(date);
+	};
+
+	// Fetch prediction when transactions change OR when prediction date changes
+	useEffect(() => {
+		if (!predictionDate) return;
+
 		const fetchPrediction = async () => {
-			const results = await fetch(`${apiUrl}/api/dashboard/predictSaving`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-			});
+			// calculate the epoch time to send to backend
+			const targetEpoch = predictionDate.getTime();
+			const lastTransactionEpoch =
+				transactions.length > 0
+					? Math.max(
+							...transactions.map((t) => new Date(t.created_at).getTime())
+						)
+					: Date.now();
+
+			// calculate offset from last transaction
+			const epochOffset = targetEpoch - lastTransactionEpoch;
+
+			const results = await fetch(
+				`${apiUrl}/api/dashboard/predictSaving?epochOffset=${epochOffset}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				}
+			);
 
 			const PredictionData = await results.json();
 			setPredictionResult(PredictionData);
 		};
 
 		fetchPrediction();
-	}, [transactions]);
+	}, [transactions, predictionDate]);
+
+	// convert the selected date to epoch milliseconds
+	const predictionEpoch = predictionDate ? predictionDate.getTime() : undefined;
 
 	return (
 		// authwrapper ensures that they have to be logged in to see it
@@ -97,6 +128,8 @@ export default function DashboardPage() {
 
 					{/* header for transaction row */}
 					<TransactionHeader setTransactions={setTransactions} />
+					{/* would like to add a tooltip here like on the line chart header */}
+					{/* gonna wait to see what yall think though */}
 
 					<TransactionRow
 						transactions={transactions}
@@ -106,21 +139,27 @@ export default function DashboardPage() {
 
 					{/* header for charts row */}
 					<div className="m-2">
-						<p className="text-sm text-muted-foreground">Monthly</p>
-						<h2 className="text-lg font-bold">Statistics and Graphs</h2>
+						<h2 className="text-lg font-bold">Category Distribution</h2>
+						<p className="text-sm text-muted-foreground">
+							Analysis of Last 30 Days
+						</p>
+						{/* would like to add a tooltip here like on the line chart header */}
+						{/* gonna wait to see what yall think though */}
 					</div>
 
 					<ChartsRow transactions={transactions} />
 
-					{/* header for charts row */}
-					<div className="m-2">
-						<p className="text-sm text-muted-foreground">Monthly</p>
-						<h2 className="text-lg font-bold">Transactions Over Time</h2>
-					</div>
-					<LineRow 
-                        transactions={transactions} 
-                        prediction={predictionResult}
-                    />
+					<LineHeader
+						onDateChange={handleDateChange}
+						transactions={transactions}
+					/>
+					<LineRow
+						transactions={transactions}
+						prediction={{
+							predict_x_epoch: predictionEpoch,
+							predict_y_net_saving: predictionResult?.predict_y_net_saving,
+						}}
+					/>
 				</div>
 			</div>
 		</AuthWrapper>
