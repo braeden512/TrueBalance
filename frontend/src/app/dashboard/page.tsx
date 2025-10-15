@@ -10,16 +10,22 @@ import { LineRow } from '@/components/line_row';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+interface PredictionData {
+    data_size?: number, 
+    predict_x_epoch?: number,
+    predict_y_net_saving?: number,
+    warning?: string,
+    regression: {
+        slope: number,
+        intercept: number
+    }
+    error?: string;
+
+}
+
 export default function DashboardPage() {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-	//ignore
-	// const [formattedTransactions, setFormattedTransactions] =
-	// 	useState<Transaction[]>(transactions);
-
-	// useEffect(() => {
-	// 	setFormattedTransactions(transactions);
-	// }, [transactions]);
+    const [predictionResult, setPredictionResult] = useState<PredictionData | null>(null);
 
 	useEffect(() => {
 		const initialFetch = async () => {
@@ -58,6 +64,24 @@ export default function DashboardPage() {
 		);
 	};
 
+    // automatically fetch prediction when transaction are fetched
+    useEffect(() => {
+		const fetchPrediction = async () => {
+			const results = await fetch(`${apiUrl}/api/dashboard/predictSaving`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+
+			const PredictionData = await results.json();
+			setPredictionResult(PredictionData);
+		};
+
+		fetchPrediction();
+	}, [transactions]);
+
 	return (
 		// authwrapper ensures that they have to be logged in to see it
 		<AuthWrapper>
@@ -93,7 +117,10 @@ export default function DashboardPage() {
 						<p className="text-sm text-muted-foreground">Monthly</p>
 						<h2 className="text-lg font-bold">Transactions Over Time</h2>
 					</div>
-					<LineRow transactions={transactions} />
+					<LineRow 
+                        transactions={transactions} 
+                        prediction={predictionResult}
+                    />
 				</div>
 			</div>
 		</AuthWrapper>

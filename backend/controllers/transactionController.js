@@ -3,8 +3,11 @@ import {
 	getTransactionsByUserId,
 	deleteTransactionById,
 	editTransactionById,
+    getPredictionByUserId
 } from '../models/transactionModel.js';
 import { findUserByEmail } from '../models/userModel.js';
+
+import { SimpleLinearRegression } from 'ml-regression-simple-linear';
 
 export const getTransactions = async (req, res) => {
 	try {
@@ -171,6 +174,76 @@ export const editTransaction = async (req, res) => {
 		);
 
 		return res.json(newTransaction);
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({ error: 'Server error' });
+	}
+};
+
+export const predictNetSaving = async (req, res) => {
+	try {
+		const email = req.user.email;
+
+		const existingUser = await findUserByEmail(email);
+
+		if (!existingUser) {
+			return res.status(400).json({ error: 'User does not exist' });
+		}
+
+        // fetch data for prediction
+		const result = await getPredictionByUserId(existingUser.id);
+
+        let cumulativeNetSaving = 0;
+        const dataRows = [];
+
+        result.forEach( transaction => {
+            const { amount, EconomyType, created_at} = transaction;
+            
+            const num_amount = Number(amount)
+
+            // get the cumulative net saving
+            if (EconomyType === "Source") {
+                cumulativeNetSaving += num_amount;
+            } else {
+                cumulativeNetSaving -= num_amount;
+            }
+
+            // data for prediction
+            dataRows.push({
+                cumulative_sum: cumulativeNetSaving, // X data
+                epoch_time: new Date(created_at).getTime() // Y data (converted to epoch time)
+            });
+             
+        });
+
+        // extract arrays for regression
+        const X_data = dataRows.map(data => data.epoch_time);
+        const Y_data = dataRows.map(data => data.cumulative_sum);
+
+        const regression = new SimpleLinearRegression(X_data, Y_data);
+
+        // predict next month
+        const lastEpoch = Math.max(...X_data);
+        const predictEpochTime = lastEpoch + 30 * 24 * 60 * 60 * 1000; 
+
+        const predictedNextNetSaving = regression.predict(predictEpochTime);
+
+        let dataWarning = undefined;
+        if (result.length < 20) {
+            dataWarning = `Prediction may not be accurate due to limited data (only ${result.length} transaction).`;
+        }
+
+		return res.json({ 
+            data_size: result.length, 
+            predict_x_epoch: predictEpochTime,
+            predict_y_net_saving: predictedNextNetSaving,
+            warning: dataWarning,
+            regression: {
+                slope: regression.slope,
+                intercept: regression.intercept
+            }
+
+         });
 	} catch (err) {
 		console.error(err);
 		return res.status(500).json({ error: 'Server error' });

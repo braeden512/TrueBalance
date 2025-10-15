@@ -5,6 +5,7 @@ import {
   getTransactions,
   deleteTransaction,
   editTransaction,
+  predictNetSaving
 } from '../controllers/transactionController.js';
 
 const router = express.Router();
@@ -18,5 +19,6 @@ router.get('/getTransactions', authMiddleware, getTransactions);
 router.post('/addTransaction', authMiddleware, addTransaction);
 router.delete('/deleteTransaction/:id', authMiddleware, deleteTransaction);
 router.put('/editTransaction/:id', authMiddleware, editTransaction);
+router.get('/predictSaving', authMiddleware, predictNetSaving);
 
 export default router;
