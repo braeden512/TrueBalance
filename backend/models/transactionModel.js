@@ -56,3 +56,12 @@ export const deleteTransactionById = async (transactionId, userId) => {
 	// return 1 if a transaction was deleted, otherwise 0
 	return result.affectedRows;
 };
+
+export const getPredictionByUserId = async (userId) => {
+	const [rows] = await db.query(
+		// start from first transaction user made
+		'SELECT * FROM transactions WHERE user_id = ?',
+		[userId]
+	);
+	return rows;
+};
