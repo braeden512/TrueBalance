@@ -10,12 +10,13 @@ import { Card } from './ui/card';
 import { formatDate } from '@/utils/formatDate';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { TransactionEditPopUp } from './transaction_edit_popup';
+import { TransactionDeletePopUp } from './transaction_delete_popup';
 
 // delete and edit button
 import { Button } from './ui/button';
 import { Trash } from 'lucide-react';
 import { Pencil } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // format used to import the transactions from a particular user
 
@@ -63,12 +64,18 @@ export function TransactionRow({
 		open: false,
 		transaction: undefined,
 	});
+	const [deleteData, setDeleteData] = useState<infoType>({
+		open: false,
+		transaction: undefined,
+	});
+
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	const handleDelete = async (transactionId: number) => {
-		// maybe should change this to a pop up
-		if (!window.confirm('Are you sure you want to delete this transaction?')) {
-			return;
-		}
+		// changed this to a pop up
+		if (!transactionId) return;
+
+		setIsDeleting(true);
 
 		try {
 			const res = await fetch(
@@ -85,6 +92,7 @@ export function TransactionRow({
 			// success
 			if (res.status === 204) {
 				onDeleteSuccess(transactionId);
+				setDeleteData({ open: false, transaction: undefined });
 			} else {
 				const errorData = await res.json();
 				console.error('Failed to delete transaction', errorData.error);
@@ -95,6 +103,8 @@ export function TransactionRow({
 		} catch (err) {
 			console.error(err);
 			alert('Unexpected error occurred during deletion');
+		} finally {
+			setIsDeleting(false);
 		}
 	};
 
@@ -181,7 +191,12 @@ export function TransactionRow({
 
 												<Button
 													variant={'ghost'}
-													onClick={() => handleDelete(transaction.id)}
+													onClick={() =>
+														setDeleteData({
+															open: true,
+															transaction: transaction,
+														})
+													}
 													className="hover:bg-red-100"
 												>
 													<Trash className="text-red-500"></Trash>
@@ -210,6 +225,22 @@ export function TransactionRow({
 					setEditData({ open: false, transaction: undefined });
 				}}
 				handleEdit={handleEdit}
+			/>
+			<TransactionDeletePopUp
+				open={deleteData.open}
+				onOpenChange={(open) =>
+					setDeleteData({
+						open,
+						transaction: open ? deleteData.transaction : undefined,
+					})
+				}
+				transactionName={deleteData.transaction?.name}
+				onConfirm={() => {
+					if (deleteData.transaction?.id !== undefined) {
+						handleDelete(deleteData.transaction.id);
+					}
+				}}
+				isDeleting={isDeleting}
 			/>
 		</div>
 	);
