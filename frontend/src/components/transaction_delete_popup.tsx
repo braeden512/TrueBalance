@@ -8,8 +8,18 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
+
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
+import {
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
+	AlertDialogTitle,
+} from './ui/alert-dialog';
 
 interface TransactionDeletePopUpProps {
 	open: boolean;
@@ -27,16 +37,17 @@ export function TransactionDeletePopUp({
 	isDeleting = false,
 }: TransactionDeletePopUpProps) {
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent>
-				<DialogHeader>
+		<AlertDialog open={open} onOpenChange={onOpenChange}>
+			<AlertDialogOverlay className="backdrop-blur-xs" />
+			<AlertDialogContent className="sm:max-w-lg shadow-2xl  bg-gray-100  rounded-xl p-6 ">
+				<AlertDialogHeader>
 					<div className="flex items-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
 							<AlertTriangle className="h-5 w-5 text-red-600" />
 						</div>
-						<DialogTitle>Delete Transaction?</DialogTitle>
+						<AlertDialogTitle>Delete Transaction?</AlertDialogTitle>
 					</div>
-					<DialogDescription className="pt-3">
+					<AlertDialogDescription className="pt-3">
 						Are you sure you want to delete{' '}
 						{transactionName ? (
 							<span className="font-semibold">
@@ -47,9 +58,9 @@ export function TransactionDeletePopUp({
 						)}
 						? This action cannot be undone and will permanently remove this
 						transaction from your records.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogFooter className="gap-2 sm:gap-0">
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter className=" ">
 					<Button
 						variant="outline"
 						onClick={() => onOpenChange(false)}
@@ -64,8 +75,8 @@ export function TransactionDeletePopUp({
 					>
 						{isDeleting ? 'Deleting...' : 'Delete'}
 					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 }

@@ -6,6 +6,7 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogOverlay,
 	DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from './ui/input';
@@ -104,7 +105,8 @@ export function TransactionEditPopUp({
 
 	return (
 		<Dialog open={data.open} onOpenChange={closeFunction}>
-			<DialogContent className="sm:max-w-lg bg-gray-100 backdrop-blur rounded-xl p-6">
+			<DialogOverlay className="backdrop-blur-xs" />
+			<DialogContent className="sm:max-w-lg shadow-2xl  bg-gray-100  rounded-xl p-6 ">
 				<DialogTitle>Edit Transaction</DialogTitle>
 				<DialogDescription className="-mt-1 mb-1 ">
 					Edit the details of the transaction

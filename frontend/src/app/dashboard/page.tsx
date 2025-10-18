@@ -8,6 +8,7 @@ import { TransactionHeader } from '@/components/transaction_header';
 import { useEffect, useState } from 'react';
 import { LineRow } from '@/components/line_row';
 import { LineHeader } from '@/components/line_header';
+import { ru } from 'date-fns/locale';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,8 +24,20 @@ interface PredictionData {
 	error?: string;
 }
 
+interface FilterRules {
+	name: string;
+	type: string;
+}
+
 export default function DashboardPage() {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
+	const [displayedTransactions, setDisplayed] = useState<Transaction[]>([]);
+
+	const [filterRules, setFilterRules] = useState<FilterRules>({
+		name: '',
+		type: '',
+	});
+
 	const [predictionResult, setPredictionResult] =
 		useState<PredictionData | null>(null);
 
@@ -45,36 +58,11 @@ export default function DashboardPage() {
 
 			const data = await results.json();
 			setTransactions(data.transactions);
+			setDisplayed(data.transactions);
 		};
 
 		initialFetch();
 	}, []);
-
-	// handles deletion success event from transaction row
-	const handleTransactionDelete = (deletedId: number) => {
-		// filter out deleted transaction from the current state
-		setTransactions((prevTransactions) =>
-			prevTransactions.filter(
-				(transactionData) => transactionData.id !== deletedId
-			)
-		);
-	};
-
-	const handleTransactionEdit = (editedTransaction: Transaction) => {
-		setTransactions((prevTransactions) =>
-			prevTransactions.map((transaction) =>
-				transaction.id === editedTransaction.id
-					? editedTransaction
-					: transaction
-			)
-		);
-	};
-
-	// handler for when date changes in LineHeader
-	const handleDateChange = (date: Date | undefined) => {
-		setPredictionDate(date);
-	};
-
 	// Fetch prediction when transactions change OR when prediction date changes
 	useEffect(() => {
 		if (!predictionDate) return;
@@ -110,6 +98,65 @@ export default function DashboardPage() {
 		fetchPrediction();
 	}, [transactions, predictionDate]);
 
+	useEffect(() => {
+		setDisplayed(
+			transactions.filter((transaction) => {
+				if (filterRules.type !== '') {
+					return (
+						transaction.type === filterRules.type &&
+						new RegExp(filterRules.name).test(transaction.name)
+					);
+				}
+				return new RegExp(filterRules.name).test(transaction.name);
+			})
+		);
+	}, [filterRules, transactions]);
+
+	// handles deletion success event from transaction row
+	const handleTransactionDelete = (deletedId: number) => {
+		// filter out deleted transaction from the current state
+		setTransactions((prevTransactions) =>
+			prevTransactions.filter(
+				(transactionData) => transactionData.id !== deletedId
+			)
+		);
+
+		setDisplayed((prevTransactions) =>
+			prevTransactions.filter(
+				(transactionData) => transactionData.id !== deletedId
+			)
+		);
+	};
+
+	const handleTransactionEdit = (editedTransaction: Transaction) => {
+		setTransactions((prevTransactions) =>
+			prevTransactions.map((transaction) =>
+				transaction.id === editedTransaction.id
+					? editedTransaction
+					: transaction
+			)
+		);
+
+		setDisplayed((prevTransactions) =>
+			prevTransactions.map((transaction) =>
+				transaction.id === editedTransaction.id
+					? editedTransaction
+					: transaction
+			)
+		);
+	};
+
+	const handleFilterRule = (type: string) =>
+		setFilterRules({ name: filterRules.name, type: type });
+
+	const handleFilterTransactions = (name: string) =>
+		setFilterRules({ name: name, type: filterRules.type });
+
+	// handler for when date changes in LineHeader
+	const handleDateChange = (date: Date | undefined) => {
+		setPredictionDate(date);
+	};
+
 	// convert the selected date to epoch milliseconds
 	const predictionEpoch = predictionDate ? predictionDate.getTime() : undefined;
 
@@ -127,12 +174,16 @@ export default function DashboardPage() {
 					<StatsRow transactions={transactions} />
 
 					{/* header for transaction row */}
-					<TransactionHeader setTransactions={setTransactions} />
+					<TransactionHeader
+						setTransactions={setTransactions}
+						handleFilterTransactions={handleFilterTransactions}
+						handleFilterRule={handleFilterRule}
+					/>
 					{/* would like to add a tooltip here like on the line chart header */}
 					{/* gonna wait to see what yall think though */}
 
 					<TransactionRow
-						transactions={transactions}
+						transactions={displayedTransactions}
 						onDeleteSuccess={handleTransactionDelete}
 						onEditSuccess={handleTransactionEdit}
 					/>
