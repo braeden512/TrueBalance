@@ -104,10 +104,14 @@ export default function DashboardPage() {
 				if (filterRules.type !== '') {
 					return (
 						transaction.type === filterRules.type &&
-						new RegExp(filterRules.name).test(transaction.name)
+						new RegExp(filterRules.name.toLowerCase()).test(
+							transaction.name.toLowerCase()
+						)
 					);
 				}
-				return new RegExp(filterRules.name).test(transaction.name);
+				return new RegExp(filterRules.name.toLowerCase()).test(
+					transaction.name.toLowerCase()
+				);
 			})
 		);
 	}, [filterRules, transactions]);
@@ -164,7 +168,7 @@ export default function DashboardPage() {
 		// authwrapper ensures that they have to be logged in to see it
 		<AuthWrapper>
 			<div
-				className="min-h-screen bg-cover bg-center"
+				className="min-h-screen  bg-cover bg-center   py-1 "
 				style={{
 					backgroundImage: "url('/images/background_pattern.png')",
 				}}

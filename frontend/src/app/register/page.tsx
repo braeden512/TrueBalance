@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function RegisterPage() {
 	const router = useRouter();
@@ -123,8 +124,18 @@ export default function RegisterPage() {
 
 					{error && <p className="text-red-600 text-sm">{error}</p>}
 
-					<Button type="submit" className="mt-4 w-full" disabled={loading}>
+					{/* <Button type="submit" className="mt-4 w-full" disabled={loading}>
 						{loading ? 'Registering...' : 'Register'}
+					</Button> */}
+
+					<Button type="submit" className="mt-4 w-full" disabled={loading}>
+						{loading ? (
+							<>
+								<Spinner /> Registering...
+							</>
+						) : (
+							'Register'
+						)}
 					</Button>
 				</form>
 

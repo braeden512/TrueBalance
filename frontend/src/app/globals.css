@@ -118,9 +118,10 @@
 	--sidebar-ring: oklch(0.556 0 0);
 }
 
+/* THIS CAUSED THE SHIFTING TO THE LEFT ISSUE WITH DIALOGE */
 /* fixes weird issue with scrollbar */
-html {
-	overflow-y: scroll;
+/* html {
+	overflow-y: auto;
 	scrollbar-gutter: stable;
 }
 ::-webkit-scrollbar {
@@ -135,7 +136,7 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: #a8a8a8;
-}
+} */
 /* end of scrollbar fix */
 
 @layer base {

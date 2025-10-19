@@ -23,7 +23,7 @@ export function TransactionHeader({
 	const [open, setOpen] = useState(false);
 	//const [filterOpen, setfilterOpen] = useState(false);
 
-	console.log('refershed');
+	//console.log('refershed');
 
 	return (
 		<div className="">
@@ -62,8 +62,6 @@ export function TransactionHeader({
 						if (setTransactions) {
 							// put the newest transaction at the top
 							setTransactions((prev) => [newTransaction, ...prev]);
-
-							//TODO re filter incase new one fits filter rules
 						}
 					}}
 				/>

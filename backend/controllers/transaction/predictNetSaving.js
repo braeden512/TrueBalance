@@ -1,9 +1,9 @@
 // this file just handles the request/response cycle and calls the service for the regression logic
 // DOESNT HANDLE REGRESSION LOGIC
 
-import { findUserByEmail } from '../../models/userModel.js';
+import { getPredictionByUserId } from '../../models/transaction/index.js';
+import { findUserByEmail } from '../../models/user/index.js';
 import { predictNetSavingFromTransactions } from '../../services/predictionService.js';
-import { getPredictionByUserId } from '../../models/transactionModel.js';
 
 export const predictNetSaving = async (req, res) => {
 	try {

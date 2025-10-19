@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -106,7 +107,15 @@ export default function LoginPage() {
 					{error && <p className="text-red-600 text-sm">{error}</p>}
 
 					<Button type="submit" className="mt-4 w-full" disabled={loading}>
-						{loading ? 'Logging in...' : 'Log in'}
+						{/* {loading ? 'Logging in...' : 'Log in'} */}
+
+						{loading ? (
+							<>
+								<Spinner /> Logging in...
+							</>
+						) : (
+							'Log in'
+						)}
 					</Button>
 				</form>
 
