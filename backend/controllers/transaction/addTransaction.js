@@ -1,5 +1,5 @@
-import { createTransaction } from '../../models/transactionModel.js';
-import { findUserByEmail } from '../../models/userModel.js';
+import { createTransaction } from '../../models/transaction/index.js';
+import { findUserByEmail } from '../../models/user/index.js';
 
 export const addTransaction = async (req, res) => {
 	try {

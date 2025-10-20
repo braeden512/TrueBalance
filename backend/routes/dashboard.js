@@ -1,18 +1,19 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/authMiddleware.js';
+
 import {
-  addTransaction,
-  getTransactions,
-  deleteTransaction,
-  editTransaction,
-  predictNetSaving
-} from '../controllers/transactionController.js';
+	addTransaction,
+	getTransactions,
+	deleteTransaction,
+	editTransaction,
+	predictNetSaving,
+} from '../controllers/transaction/index.js';
 
 const router = express.Router();
 
 router.get('/verify', authMiddleware, (req, res) => {
-  //req.user {id=userid,email=email}
-  return res.json({ message: 'This is protected data', user: req.user });
+	//req.user {id=userid,email=email}
+	return res.json({ message: 'This is protected data', user: req.user });
 });
 
 router.get('/getTransactions', authMiddleware, getTransactions);

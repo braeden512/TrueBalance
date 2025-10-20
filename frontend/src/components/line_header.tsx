@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon, InfoIcon, AlertCircle } from 'lucide-react';
-import { format, startOfToday } from 'date-fns';
+import { format, startOfToday, startOfTomorrow } from 'date-fns';
 import {
 	Tooltip,
 	TooltipContent,
@@ -103,7 +103,7 @@ export function LineHeader({ onDateChange, transactions }: LineHeaderProps) {
 							selected={date}
 							onSelect={handleDateSelect}
 							defaultMonth={new Date()}
-							disabled={{ before: startOfToday() }}
+							disabled={{ before: startOfTomorrow() }}
 						/>
 					</PopoverContent>
 				</Popover>

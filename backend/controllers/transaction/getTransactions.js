@@ -1,5 +1,5 @@
-import { getTransactionsByUserId } from '../../models/transactionModel.js';
-import { findUserByEmail } from '../../models/userModel.js';
+import { getTransactionsByUserId } from '../../models/transaction/index.js';
+import { findUserByEmail } from '../../models/user/index.js';
 
 export const getTransactions = async (req, res) => {
 	try {

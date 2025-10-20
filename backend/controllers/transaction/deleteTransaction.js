@@ -1,5 +1,5 @@
-import { deleteTransactionById } from '../../models/transactionModel.js';
-import { findUserByEmail } from '../../models/userModel.js';
+import { deleteTransactionById } from '../../models/transaction/index.js';
+import { findUserByEmail } from '../../models/user/index.js';
 
 export const deleteTransaction = async (req, res) => {
 	try {

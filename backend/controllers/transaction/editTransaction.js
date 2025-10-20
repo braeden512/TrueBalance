@@ -1,5 +1,5 @@
-import { editTransactionById } from '../../models/transactionModel.js';
-import { findUserByEmail } from '../../models/userModel.js';
+import { editTransactionById } from '../../models/transaction/index.js';
+import { findUserByEmail } from '../../models/user/index.js';
 
 export const editTransaction = async (req, res) => {
 	try {
