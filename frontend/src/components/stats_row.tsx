@@ -58,7 +58,7 @@ export function StatsRow({ transactions }: TransactionRowProps) {
 
 	let change;
 	if (netLast !== 0) {
-		const percent = ((netCurrent - netLast) / netLast) * 100;
+		const percent = ((netCurrent - netLast) / Math.abs(netLast)) * 100;
 		change = percent.toFixed(1) + '%';
 	} else {
 		change = 'N/A';

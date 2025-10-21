@@ -207,8 +207,8 @@ export function TransactionRow({
 								) : (
 									<TableRow>
 										<TableCell
-											colSpan={6}
-											className="text-center pl-22 pt-6 text-gray-500"
+											colSpan={7}
+											className="text-center pt-6 text-gray-500"
 										>
 											No transactions found.
 										</TableCell>
