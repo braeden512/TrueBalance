@@ -22,12 +22,21 @@ export function StatsRow({ transactions }: TransactionRowProps) {
 	let expenseCurrent = 0;
 	let incomeLast = 0;
 	let expenseLast = 0;
+	let incomeAllTime = 0;
+	let expenseAllTime = 0;
 
 	// loop through each transaction
 	if (transactions !== undefined) {
 		for (const transaction of transactions) {
 			const amount = Number(transaction.amount);
 			const transactionDate = new Date(transaction.created_at);
+
+			// all time totals
+			if (transaction.EconomyType == 'Source') {
+				incomeAllTime += amount;
+			} else if (transaction.EconomyType == 'Sink') {
+				expenseAllTime += amount;
+			}
 
 			if (transactionDate >= currentStart && transactionDate <= currentEnd) {
 				// includes currentStart and currentEnd
@@ -51,9 +60,9 @@ export function StatsRow({ transactions }: TransactionRowProps) {
 	const netCurrent = incomeCurrent - expenseCurrent;
 	const netLast = incomeLast - expenseLast;
 
-	const totalIncome = formatCurrency(incomeCurrent);
-	const totalExpense = formatCurrency(expenseCurrent);
-	const totalDollar = formatCurrency(incomeCurrent - expenseCurrent);
+	const currentIncome = formatCurrency(incomeCurrent);
+	const currentExpense = formatCurrency(expenseCurrent);
+	const totalDollar = formatCurrency(incomeAllTime - expenseAllTime);
 	const netSaving = formatCurrency(netCurrent);
 
 	let change;
@@ -70,12 +79,12 @@ export function StatsRow({ transactions }: TransactionRowProps) {
 			<div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4 m-2">
 				<DashboardCell
 					icon={<Plus size={28} />}
-					number={totalIncome}
+					number={currentIncome}
 					label="Income This Month"
 				/>
 				<DashboardCell
 					icon={<Minus size={28} />}
-					number={totalExpense}
+					number={currentExpense}
 					label="Expenses This Month"
 				/>
 				{/* overall income - expenses */}
