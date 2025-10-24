@@ -11,12 +11,21 @@ import { formatDate } from '@/utils/formatDate';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { TransactionEditPopUp } from './transaction_edit_popup';
 import { TransactionDeletePopUp } from './transaction_delete_popup';
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from '@/components/ui/pagination';
 
 // delete and edit button
 import { Button } from './ui/button';
 import { Trash } from 'lucide-react';
 import { Pencil } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 // format used to import the transactions from a particular user
 
@@ -52,6 +61,8 @@ const getStyleColor = (type: 'Source' | 'Sink') => ({
 });
 const getSign = (type: 'Source' | 'Sink') => (type === 'Source' ? '+' : '-');
 
+const ITEMS_PER_PAGE = 10;
+
 export function TransactionRow({
 	transactions,
 	onDeleteSuccess,
@@ -60,6 +71,7 @@ export function TransactionRow({
 	// confirmation before deletion
 	const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+	const [currentPage, setCurrentPage] = useState(1);
 	const [editData, setEditData] = useState<infoType>({
 		open: false,
 		transaction: undefined,
@@ -70,6 +82,20 @@ export function TransactionRow({
 	});
 
 	const [isDeleting, setIsDeleting] = useState(false);
+
+	// Calculate pagination values
+	const totalPages = Math.ceil(transactions.length / ITEMS_PER_PAGE);
+	const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+	const endIndex = startIndex + ITEMS_PER_PAGE;
+	const currentTransactions = useMemo(
+		() => transactions.slice(startIndex, endIndex),
+		[transactions, startIndex, endIndex]
+	);
+
+	// Reset to page 1 if current page exceeds total pages
+	if (currentPage > totalPages && totalPages > 0) {
+		setCurrentPage(1);
+	}
 
 	const handleDelete = async (transactionId: number) => {
 		// changed this to a pop up
@@ -136,11 +162,47 @@ export function TransactionRow({
 		});
 	};
 
+	// generate page numbers to display
+	const getPageNumbers = () => {
+		const pages = [];
+		const maxVisible = 5;
+
+		if (totalPages <= maxVisible) {
+			for (let i = 1; i <= totalPages; i++) {
+				pages.push(i);
+			}
+		} else {
+			if (currentPage <= 3) {
+				for (let i = 1; i <= 4; i++) {
+					pages.push(i);
+				}
+				pages.push('ellipsis');
+				pages.push(totalPages);
+			} else if (currentPage >= totalPages - 2) {
+				pages.push(1);
+				pages.push('ellipsis');
+				for (let i = totalPages - 3; i <= totalPages; i++) {
+					pages.push(i);
+				}
+			} else {
+				pages.push(1);
+				pages.push('ellipsis');
+				pages.push(currentPage - 1);
+				pages.push(currentPage);
+				pages.push(currentPage + 1);
+				pages.push('ellipsis');
+				pages.push(totalPages);
+			}
+		}
+
+		return pages;
+	};
+
 	return (
 		<div>
 			<div className="m-2">
 				<Card className="p-5">
-					<div className="max-h-96 overflow-y-auto">
+					<div className="max-h-150 overflow-y-auto">
 						<Table>
 							<TableHeader className="w-full border-b bg-white shadow-sm">
 								<TableRow>
@@ -156,13 +218,10 @@ export function TransactionRow({
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{transactions.length > 0 ? (
-									transactions.map((transaction, index) => (
+								{currentTransactions.length > 0 ? (
+									currentTransactions.map((transaction, index) => (
 										<TableRow key={transaction.id}>
-											{/* transaction.id is an easy way for us to identify what transaction it is from ANY user*/}
-											{/* for example, if two users both make a new transaction, the transaction.id from the second user would say... */}
-											{/* 2, even though that user hadn't created a transaction yet. this is why we shouldn't use transaction.id for the line below too*/}
-											<TableCell>{index + 1}</TableCell>
+											<TableCell>{startIndex + index + 1}</TableCell>
 											<TableCell>{transaction.name}</TableCell>
 											<TableCell style={getStyleColor(transaction.EconomyType)}>
 												{getSign(transaction.EconomyType)}
@@ -171,7 +230,6 @@ export function TransactionRow({
 											<TableCell>{transaction.type}</TableCell>
 											<TableCell>{transaction.notes}</TableCell>
 											<TableCell className="text-right">
-												{/* look in utils folder to find this file (just formats the date correctly) */}
 												{formatDate(transaction.created_at)}
 											</TableCell>
 
@@ -183,7 +241,6 @@ export function TransactionRow({
 															open: true,
 															transaction: transaction,
 														});
-														//setEditOpen(true);
 													}}
 												>
 													<Pencil></Pencil>
@@ -217,6 +274,59 @@ export function TransactionRow({
 							</TableBody>
 						</Table>
 					</div>
+
+					{/* pagination component */}
+					{transactions.length > 0 && (
+						<div className="mt-4">
+							<Pagination>
+								<PaginationContent>
+									<PaginationItem>
+										<PaginationPrevious
+											onClick={() =>
+												setCurrentPage((prev) => Math.max(prev - 1, 1))
+											}
+											className={
+												currentPage === 1
+													? 'pointer-events-none opacity-50'
+													: 'cursor-pointer'
+											}
+										/>
+									</PaginationItem>
+
+									{getPageNumbers().map((page, idx) =>
+										page === 'ellipsis' ? (
+											<PaginationItem key={`ellipsis-${idx}`}>
+												<PaginationEllipsis />
+											</PaginationItem>
+										) : (
+											<PaginationItem key={page}>
+												<PaginationLink
+													onClick={() => setCurrentPage(page as number)}
+													isActive={currentPage === page}
+													className="cursor-pointer"
+												>
+													{page}
+												</PaginationLink>
+											</PaginationItem>
+										)
+									)}
+
+									<PaginationItem>
+										<PaginationNext
+											onClick={() =>
+												setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+											}
+											className={
+												currentPage === totalPages
+													? 'pointer-events-none opacity-50'
+													: 'cursor-pointer'
+											}
+										/>
+									</PaginationItem>
+								</PaginationContent>
+							</Pagination>
+						</div>
+					)}
 				</Card>
 			</div>
 			<TransactionEditPopUp
