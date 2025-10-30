@@ -15,6 +15,7 @@ const convertToCSV = (data: Transaction[]): string => {
 		'Name',
 		'Amount',
 		'Type',
+		'Source type',
 		'Notes',
 		'Date of Transaction',
 	].join(',');
@@ -37,6 +38,7 @@ const convertToCSV = (data: Transaction[]): string => {
 		return [
 			item.name,
 			item.amount,
+			item.type,
 			item.EconomyType,
 			item.notes,
 			// Use the newly formatted date
