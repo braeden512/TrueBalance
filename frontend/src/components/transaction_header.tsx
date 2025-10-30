@@ -5,7 +5,7 @@ import { Transaction } from './transaction_row';
 import { TransactionPopup } from './transaction_popup';
 import { TransactionFilterPopUp } from './transaction_filter_popup';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Command, CommandInput } from './ui/command';
 
@@ -21,9 +21,28 @@ export function TransactionHeader({
 	handleFilterRule,
 }: TransactionHeaderProps) {
 	const [open, setOpen] = useState(false);
-	//const [filterOpen, setfilterOpen] = useState(false);
+	const [searchValue, setSearchValue] = useState('');
+	const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-	//console.log('refershed');
+	// debounce the filter function (basically wait until user stops typing)
+	useEffect(() => {
+		// clear existing timeout
+		if (debounceTimeout.current) {
+			clearTimeout(debounceTimeout.current);
+		}
+
+		// set new timeout
+		debounceTimeout.current = setTimeout(() => {
+			handleFilterTransactions(searchValue);
+		}, 300); // 300ms delay
+
+		// cleanup
+		return () => {
+			if (debounceTimeout.current) {
+				clearTimeout(debounceTimeout.current);
+			}
+		};
+	}, [searchValue]);
 
 	return (
 		<div className="">
@@ -37,9 +56,9 @@ export function TransactionHeader({
 					<Command className="w-40  h-9 rounded-3xl">
 						<CommandInput
 							placeholder="Search Name..."
+							value={searchValue}
 							onValueChange={(e) => {
-								handleFilterTransactions(e);
-								//console.log(e);
+								setSearchValue(e);
 							}}
 						/>
 					</Command>

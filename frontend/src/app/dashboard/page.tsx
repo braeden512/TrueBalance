@@ -8,7 +8,6 @@ import { TransactionHeader } from '@/components/transaction_header';
 import { useEffect, useState } from 'react';
 import { LineRow } from '@/components/line_row';
 import { LineHeader } from '@/components/line_header';
-import { ru } from 'date-fns/locale';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
