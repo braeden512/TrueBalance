@@ -8,7 +8,8 @@ import { TransactionHeader } from '@/components/transaction_header';
 import { useEffect, useState } from 'react';
 import { LineRow } from '@/components/line_row';
 import { LineHeader } from '@/components/line_header';
-import { ru } from 'date-fns/locale';
+import { ExportTransactionsButton } from '@/components/ExportTransactionsButton';
+import { ImportDataButton } from '@/components/ImportDataButton';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,23 +47,28 @@ export default function DashboardPage() {
 		undefined
 	);
 
+	// fetch the data to populate transaction table
+	const initialFetch = async () => {
+		const results = await fetch(`${apiUrl}/api/dashboard/getTransactions`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+			},
+		});
+
+		const data = await results.json();
+		setTransactions(data.transactions);
+		setDisplayed(data.transactions);
+	};
+
 	useEffect(() => {
-		const initialFetch = async () => {
-			const results = await fetch(`${apiUrl}/api/dashboard/getTransactions`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-			});
-
-			const data = await results.json();
-			setTransactions(data.transactions);
-			setDisplayed(data.transactions);
-		};
-
-		initialFetch();
+		const token = localStorage.getItem('token');
+		if (token) {
+			initialFetch();
+		}
 	}, []);
+
 	// Fetch prediction when transactions change OR when prediction date changes
 	useEffect(() => {
 		if (!predictionDate) return;
@@ -176,6 +182,11 @@ export default function DashboardPage() {
 				{/* adds x-axis padding */}
 				<div className="px-4 md:px-6 lg:px-40">
 					<StatsRow transactions={transactions} />
+
+					<div className="flex justify-end">
+						<ImportDataButton onImportSuccess={initialFetch}></ImportDataButton>
+						<ExportTransactionsButton transactions={transactions} />
+					</div>
 
 					{/* header for transaction row */}
 					<TransactionHeader
