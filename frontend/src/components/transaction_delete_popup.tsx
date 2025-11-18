@@ -20,6 +20,7 @@ import {
 	AlertDialogOverlay,
 	AlertDialogTitle,
 } from './ui/alert-dialog';
+import { Spinner } from './ui/spinner';
 
 interface TransactionDeletePopUpProps {
 	open: boolean;
@@ -73,7 +74,13 @@ export function TransactionDeletePopUp({
 						onClick={onConfirm}
 						disabled={isDeleting}
 					>
-						{isDeleting ? 'Deleting...' : 'Delete'}
+						{isDeleting ? (
+							<>
+								<Spinner /> Deleting...
+							</>
+						) : (
+							'Delete'
+						)}
 					</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>

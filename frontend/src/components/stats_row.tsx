@@ -82,6 +82,7 @@ export function StatsRow({ transactions }: TransactionRowProps) {
 					number={currentIncome}
 					label="Income This Month"
 				/>
+
 				<DashboardCell
 					icon={<Minus size={28} />}
 					number={currentExpense}

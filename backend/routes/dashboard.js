@@ -10,6 +10,8 @@ import {
 	importTransactions,
 } from '../controllers/transaction/index.js';
 
+import { promptAi } from '../controllers/ai/index.js';
+
 const router = express.Router();
 
 router.get('/verify', authMiddleware, (req, res) => {
@@ -23,5 +25,6 @@ router.delete('/deleteTransaction/:id', authMiddleware, deleteTransaction);
 router.put('/editTransaction/:id', authMiddleware, editTransaction);
 router.get('/predictSaving', authMiddleware, predictNetSaving);
 router.post('/importTransactions', authMiddleware, importTransactions);
+router.put('/promptAi', authMiddleware, promptAi);
 
 export default router;
