@@ -10,6 +10,8 @@ import { LineRow } from '@/components/line_row';
 import { LineHeader } from '@/components/line_header';
 import { ExportTransactionsButton } from '@/components/ExportTransactionsButton';
 import { ImportDataButton } from '@/components/ImportDataButton';
+import { Button } from '@/components/ui/button';
+import { AiHeader } from '@/components/ai_header';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -179,6 +181,7 @@ export default function DashboardPage() {
 					backgroundImage: "url('/images/background_pattern.png')",
 				}}
 			>
+				<AiHeader />
 				{/* adds x-axis padding */}
 				<div className="px-4 md:px-6 lg:px-40">
 					<StatsRow transactions={transactions} />

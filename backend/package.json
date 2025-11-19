@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "ml-regression-simple-linear": "^3.0.1",
     "mysql2": "^3.14.3",
+    "openai": "^6.9.1",
     "zxcvbn": "^4.4.2"
   }
 }

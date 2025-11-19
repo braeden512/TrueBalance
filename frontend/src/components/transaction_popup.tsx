@@ -66,6 +66,7 @@ export function TransactionPopup({
 			EconomyType: tab === 'income' ? 'Source' : 'Sink',
 			notes,
 		};
+
 		try {
 			setLoading(true);
 			const res = await fetch(`${apiUrl}/api/dashboard/addTransaction`, {
