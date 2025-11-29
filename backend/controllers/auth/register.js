@@ -1,0 +1,54 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import zxcvbn from 'zxcvbn';
+
+import { findUserByEmail, createUser } from '../../models/user/index.js';
+
+// register logic controller
+export const register = async (req, res) => {
+	try {
+		const { email, password, confirmPassword } = req.body;
+
+		// check if all fields are filled
+		if (!email || !password || !confirmPassword) {
+			return res.status(400).json({ error: 'All fields are required' });
+		}
+
+		// check if password matches retype password
+		if (password !== confirmPassword) {
+			return res.status(400).json({ error: 'Passwords do not match' });
+		}
+
+		// check strength of password
+		const { score, feedback } = zxcvbn(password);
+		// we can change this threshold later if needed
+		if (score < 0) {
+			return res.status(400).json({
+				error: 'Weak password',
+				feedback: feedback.suggestions.join(' '),
+			});
+		}
+
+		// check if user already exists
+		const existingUser = await findUserByEmail(email);
+		if (existingUser) {
+			return res.status(400).json({ error: 'User already exists' });
+		}
+
+		// hash the password
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		// create user
+		const userId = await createUser(email, hashedPassword);
+
+		// create jwt
+		const token = jwt.sign({ id: userId, email }, process.env.JWT_SECRET, {
+			expiresIn: '1h',
+		});
+
+		return res.status(201).json({ message: 'User registered', token });
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({ error: 'Server error' });
+	}
+};

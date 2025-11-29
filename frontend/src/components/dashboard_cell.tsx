@@ -1,0 +1,28 @@
+'use client';
+
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { ReactNode } from 'react';
+import { SkeletonCard } from './skeleton_card';
+
+export interface DashboardCellProps {
+	// ReactNode is the type for the icon we use as prop
+	icon: ReactNode;
+	number: string | number;
+	label: string;
+}
+
+export function DashboardCell({ icon, number, label }: DashboardCellProps) {
+	return (
+		<Card className="flex flex-col items-center justify-center">
+			{/* <SkeletonCard /> */}
+			<CardHeader className="flex flex-col gap-4 p-3 items-center">
+				{icon}
+				<span className="text-2xl font-bold">{number}</span>
+			</CardHeader>
+
+			<CardContent className="text-sm text-center text-gray-500 -mt-8">
+				{label}
+			</CardContent>
+		</Card>
+	);
+}
