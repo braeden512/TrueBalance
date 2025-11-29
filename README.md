@@ -16,7 +16,7 @@ With statistics and visual reports, you’ll always know where your money is goi
 
 ### Step 4: Go to your terminal and write:
 
-#### 1. `cd frontend`
+#### 1. `cd backend`
 
 - create `.env.development` file & copy and paste below (fill out info)
 
@@ -28,11 +28,12 @@ With statistics and visual reports, you’ll always know where your money is goi
     DB_CONNECTION_LIMIT=10
     JWT_SECRET=devsecret123
     PORT=5001
+    OPENAI_API_KEY= # fill out
 ```
 
 - run 'npm install'
 
-#### 2. `cd ../backend`
+#### 2. `cd ../frontend`
 
 - create `.env.development` file & copy and paste below
 
@@ -57,10 +58,3 @@ With statistics and visual reports, you’ll always know where your money is goi
 <img width="1440" height="714" alt="image" src="https://github.com/user-attachments/assets/4bc8a7ab-f627-425d-8552-b1fe9e5edf17" />
 
 <img width="1440" height="522" alt="image" src="https://github.com/user-attachments/assets/4e168cfe-d0fd-48ee-9495-1991473164a7" />
-
-
-
-
-
-
-
