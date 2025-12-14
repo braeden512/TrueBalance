@@ -106,9 +106,13 @@ export function LineRow({ transactions, prediction }: LineRowProps) {
 	};
 
 	// Custom dot for prediction point
-	const PredictionDot = (props: any) => {
-		const { cx, cy, payload } = props;
-		if (payload.dataType === 'Prediction') {
+	const PredictionDot = (props: {
+		cx?: number;
+		cy?: number;
+		payload?: ChartPoint;
+	}) => {
+		const { payload, cx, cy } = props;
+		if (payload?.dataType === 'Prediction') {
 			return (
 				<g>
 					<circle
