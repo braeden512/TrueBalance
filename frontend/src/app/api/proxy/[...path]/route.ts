@@ -9,7 +9,7 @@ export async function GET(
 	const { path } = await params;
 	const pathString = path.join('/');
 	const searchParams = request.nextUrl.searchParams.toString();
-	const url = `${BACKEND_URL}/api/${pathString}${searchParams ? `?${searchParams}` : ''}`;
+	const url = `${BACKEND_URL}/${pathString}${searchParams ? `?${searchParams}` : ''}`;
 
 	const token = request.headers.get('authorization');
 
@@ -38,7 +38,7 @@ export async function POST(
 ) {
 	const { path } = await params;
 	const pathString = path.join('/');
-	const url = `${BACKEND_URL}/api/${pathString}`;
+	const url = `${BACKEND_URL}/${pathString}`;
 	const body = await request.json();
 	const token = request.headers.get('authorization');
 
@@ -68,7 +68,7 @@ export async function DELETE(
 ) {
 	const { path } = await params;
 	const pathString = path.join('/');
-	const url = `${BACKEND_URL}/api/${pathString}`;
+	const url = `${BACKEND_URL}/${pathString}`;
 	const token = request.headers.get('authorization');
 
 	try {
@@ -96,7 +96,7 @@ export async function PUT(
 ) {
 	const { path } = await params;
 	const pathString = path.join('/');
-	const url = `${BACKEND_URL}/api/${pathString}`;
+	const url = `${BACKEND_URL}/${pathString}`;
 	const body = await request.json();
 	const token = request.headers.get('authorization');
 
