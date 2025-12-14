@@ -1,5 +1,8 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.development' });
+
+if (process.env.NODE_ENV !== 'production') {
+	dotenv.config({ path: '.env.development' });
+}
 
 import mysql from 'mysql2/promise';
 
