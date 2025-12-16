@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 import { findUserByEmail } from '../../models/user/index.js';
 import { getTransactionsByUserId } from '../../models/transaction/index.js';
 
-dotenv.config({ path: '.env.development' });
+if (process.env.NODE_ENV !== 'production') {
+	dotenv.config({ path: '.env.development' });
+}
 
 const openai = new OpenAi({
 	apiKey: process.env.OPENAI_API_KEY,
@@ -34,6 +36,17 @@ export const promptAi = async (req, res) => {
 		const userTransactions = await getTransactionsByUserId(existingUser.id);
 
 		const { prompt, conversationHistory } = req.body;
+
+		if (!prompt || typeof prompt !== 'string' || prompt.length > 500) {
+			return res.status(400).json({ error: 'Invalid prompt' });
+		}
+
+		if (
+			conversationHistory &&
+			(!Array.isArray(conversationHistory) || conversationHistory.length > 10)
+		) {
+			return res.status(400).json({ error: 'Invalid conversation history' });
+		}
 
 		// 		const messages = [
 		// 			{
