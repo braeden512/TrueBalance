@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { Spinner } from '@/components/ui/spinner';
+import Image from 'next/image';
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -68,9 +69,14 @@ export default function LoginPage() {
 		>
 			<div className="bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-10 w-full max-w-md">
 				<div className="flex justify-center mb-1">
-					<div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
-						<span className="text-2xl font-bold text-white">TB</span>
-					</div>
+					<Image
+						src="/favicon.svg"
+						alt="True Balance logo"
+						width={64}
+						height={64}
+						className="rounded-full"
+						priority
+					/>
 				</div>
 
 				<h1 className="text-3xl font-bold mb-3 text-center">Log in</h1>
