@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 // allows us to have the user's information in this file
 import { useAuth } from '../../context/AuthContext';
+import Image from 'next/image';
 
 export default function Navbar() {
 	const pathname = usePathname();
@@ -22,10 +23,18 @@ export default function Navbar() {
 			<div className="container mx-auto flex h-16 items-center justify-between">
 				{/* Logo and Title */}
 				<div className="flex items-center space-x-3">
-					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
-						<span className="text-lg font-bold text-white">TB</span>
-					</div>
-					<span className="text-xl font-bold text-gray-800">TrueBalance</span>
+					<Link href="/dashboard" className="flex items-center space-x-3">
+						<div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm">
+							<Image
+								src="/favicon.svg"
+								alt="True Balance logo"
+								width={28}
+								height={28}
+								priority
+							/>
+						</div>
+						<span className="text-xl font-bold text-gray-800">TrueBalance</span>
+					</Link>
 				</div>
 
 				{/* Navigation Links */}
