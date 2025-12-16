@@ -1,4 +1,4 @@
-# personal-finance-tracker
+# TrueBalance
 
 TrueBalance helps you take control of your finances with ease and clarity.
 
